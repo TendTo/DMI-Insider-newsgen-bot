@@ -24,10 +24,14 @@ Listed in requirements.txt
 	- **image**
 		- **resize_mode:** how you want the image to be resized. Can be 'crop' or 'scale'
 		- **blur:** how much blur you want to apply to the image
+	- **groups:** list of chats or groups allowed to create images
+		- **g1:** group id 1 (number)
+		- **...**
 	- **token:** the token for your telegram bot
 	- **webhook:**
 		- **enabled:** whether or not the bot should use webhook (false recommended for local)
 		- **url:** the url used by the webhook
+- Edit the images desired in "data/img"
 - **Run** `python3 main.py`
 
 ## :whale: Setting up a Docker container
@@ -38,6 +42,7 @@ Listed in requirements.txt
 ### Steps:
 - Clone this repository
 - In "config/settings.yaml.dist", edit the desired values. Be mindful that the one listed below will overwrite the ones in "config/settings.yaml.dist", even if they aren't used in the command line
+- Edit the images desired in "data/img"
 - **Run** `docker build --tag botimage --build-arg TOKEN=<token_arg> [...] .` 
 
 | In the command line <br>(after each --build-arg) | Type | Function | Optional |

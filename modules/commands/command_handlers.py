@@ -50,7 +50,7 @@ def help_cmd(update: Update, context: CallbackContext):
 def create_cmd(update: Update, context: CallbackContext) -> int:
     """Handles the /settings command
     Start the process aimed to create the requested image
-    Puts the conversation in the "title" state
+    Puts the conversation in the "template" state if all goes well, "end" state otherwise
 
     Args:
         update (Update): update event
@@ -61,9 +61,11 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
     """
     info = get_message_info(update, context)
     inline_keyboard = None
-    if os.path.exists(f"data/img/{str(info['sender_id'])}.png"):  # if the bot is already making an image for the user
+    return_state = STATE['end']
+    if info['chat_id'] not in config_map['groups']:  # the group is not among the allowed ones
+        text = "Questo gruppo/chat non è fra quelli supportati"
+    elif os.path.exists(f"data/img/{str(info['sender_id'])}.png"):  # if the bot is already making an image for the user
         text = read_md("create_fail")
-        return_state = STATE['end']
     else:
         text = read_md("create")
         return_state = STATE['template']
@@ -99,6 +101,17 @@ def cancel_cmd(update: Update, context: CallbackContext) -> int:
 
 
 def template_callback(update: Update, context: CallbackContext) -> int:
+    """Handles the template callback
+    Select the desidered template
+    Puts the conversation in the "title" state
+
+    Args:
+        update (Update): update event
+        context (CallbackContext): context passed by the handler
+
+    Returns:
+        int: new state of the conversation
+    """
     info = get_callback_info(update, context)
     context.user_data['template'] = update.callback_query.data[9:]
     text = read_md("template")

@@ -3,6 +3,10 @@ debug:
 image:
   resize_mode: 'scale'
   blur: 10
+groups:
+  - 0
+  - 0
+  - 0
 token: ''
 webhook:
   enabled: false

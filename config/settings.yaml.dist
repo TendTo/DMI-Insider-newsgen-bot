@@ -1,7 +1,7 @@
 debug:
   local_log: false
 image:
-  resize_mode: 'crop'
+  resize_mode: 'scale'
   blur: 10
 token: ''
 webhook:

@@ -21,6 +21,9 @@ Listed in requirements.txt
 - Rename "config/settings.yaml.dist" in "config/settings.yaml" and edit the desired parameters:
 	- **debug:**
 		- **db_log:** save each and every message in a log file. Make sure the path "logs/messages.log" is valid before putting it to true
+	- **image**
+		- **resize_mode:** how you want the image to be resized. Can be 'crop' or 'scale'
+		- **blur:** how much blur you want to apply to the image
 	- **token:** the token for your telegram bot
 	- **webhook:**
 		- **enabled:** whether or not the bot should use webhook (false recommended for local)

@@ -3,7 +3,7 @@
 # libs
 import os
 # telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler,\
+from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler,\
      Filters, Dispatcher
 # debug
 from modules.debug.log_manager import log_message
@@ -11,7 +11,7 @@ from modules.debug.log_manager import log_message
 from modules.data.data_reader import config_map
 # commands
 from modules.commands.command_handlers import STATE, start_cmd, help_cmd, create_cmd, background_msg, title_msg, caption_msg,\
-    cancel_cmd, fail_msg
+    cancel_cmd, fail_msg, template_callback
 # endregion
 
 
@@ -30,6 +30,7 @@ def add_handlers(dp: Dispatcher):
         ConversationHandler(
             entry_points=[CommandHandler('create', create_cmd)],
             states={
+                STATE['template']: [CallbackQueryHandler(template_callback, pattern=r"^template\.*")],
                 STATE['background']:
                 [MessageHandler(Filters.photo | (Filters.text & Filters.regex(r"^[Nn]one$")), background_msg)],
                 STATE['title']: [MessageHandler(Filters.text & ~Filters.command, title_msg)],

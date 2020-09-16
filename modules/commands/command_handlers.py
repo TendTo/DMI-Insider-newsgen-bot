@@ -2,12 +2,23 @@
 import os
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
-from telegram import Update, ParseMode, Bot
+from telegram import Update, ParseMode, Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from modules.commands.command_utility import get_message_info
+from modules.commands.command_utility import get_message_info, get_callback_info
 from modules.data.data_reader import read_md, config_map
 
-STATE = {'background': 1, 'title': 2, 'caption': 3, 'end': -1}  # represents the various states for the creation of the image
+STATE = {
+    'background': 1,
+    'template': 2,
+    'title': 3,
+    'caption': 4,
+    'end': -1
+}  # represents the various states for the creation of the image
+TEMPLATE = {
+    'DMI': "data/img/template_DMI.png",
+    'matematica': "data/img/template_matematica.png",
+    'informatica': "data/img/template_informatica.png"
+}
 
 
 def start_cmd(update: Update, context: CallbackContext):
@@ -20,10 +31,7 @@ def start_cmd(update: Update, context: CallbackContext):
     """
     info = get_message_info(update, context)
     text = read_md("start")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def help_cmd(update: Update, context: CallbackContext):
@@ -36,10 +44,7 @@ def help_cmd(update: Update, context: CallbackContext):
     """
     info = get_message_info(update, context)
     text = read_md("help")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def create_cmd(update: Update, context: CallbackContext) -> int:
@@ -55,17 +60,23 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
         int: new state of the conversation
     """
     info = get_message_info(update, context)
+    inline_keyboard = None
     if os.path.exists(f"data/img/{str(info['sender_id'])}.png"):  # if the bot is already making an image for the user
         text = read_md("create_fail")
         return_state = STATE['end']
     else:
         text = read_md("create")
-        return_state = STATE['title']
+        return_state = STATE['template']
+        inline_keyboard = InlineKeyboardMarkup([[
+            InlineKeyboardButton(text="DMI", callback_data="template_DMI"),
+            InlineKeyboardButton(text="Informatica", callback_data="template_informatica"),
+            InlineKeyboardButton(text="Matematica", callback_data="template_matematica")
+        ]])
 
     info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
                              text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+                             parse_mode=ParseMode.MARKDOWN_V2,
+                             reply_markup=inline_keyboard)
     return return_state
 
 
@@ -83,11 +94,19 @@ def cancel_cmd(update: Update, context: CallbackContext) -> int:
     """
     info = get_message_info(update, context)
     text = read_md("cancel")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['end']
+
+
+def template_callback(update: Update, context: CallbackContext) -> int:
+    info = get_callback_info(update, context)
+    context.user_data['template'] = update.callback_query.data[9:]
+    text = read_md("template")
+    info['bot'].edit_message_text(chat_id=info['chat_id'],
+                                  message_id=info['message_id'],
+                                  text=text,
+                                  parse_mode=ParseMode.MARKDOWN_V2)
+    return STATE['title']
 
 
 def title_msg(update: Update, context: CallbackContext) -> int:
@@ -104,10 +123,7 @@ def title_msg(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     context.user_data['title'] = info['text'].upper()
     text = read_md("title")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['caption']
 
 
@@ -125,10 +141,7 @@ def caption_msg(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     context.user_data['caption'] = info['text']
     text = read_md("caption")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['background']
 
 
@@ -152,15 +165,13 @@ def background_msg(update: Update, context: CallbackContext) -> int:
         bg_image = info['bot'].getFile(photo[-1].file_id)
         bg_image.download(photo_path)
 
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     send_image(bot=info['bot'],
                chat_id=info['chat_id'],
                title=context.user_data['title'],
                caption=context.user_data['caption'],
-               photo_path=photo_path)
+               photo_path=photo_path,
+               template=context.user_data['template'])
     return STATE['end']
 
 
@@ -178,13 +189,10 @@ def fail_msg(update: Update, context: CallbackContext) -> None:
     """
     info = get_message_info(update, context)
     text = read_md("fail")
-    info['bot'].send_message(chat_id=info['chat_id'],
-                             message_id=info['message_id'],
-                             text=text,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
-def send_image(bot: Bot, chat_id: int, title: str, caption: str, photo_path: str):
+def send_image(bot: Bot, chat_id: int, title: str, caption: str, photo_path: str, template: str):
     """Creates and sends the requested image
 
     Args:
@@ -193,20 +201,21 @@ def send_image(bot: Bot, chat_id: int, title: str, caption: str, photo_path: str
         title (str): title of the image
         caption (str): caption of the image
         photo_path (str): path where the image is stored
+        template (str): name of the template to apply in the foreground
     """
     if os.path.exists(photo_path):
         im: Image.Image = Image.open(photo_path).filter(ImageFilter.GaussianBlur(config_map['image']['blur']))
     else:
         im: Image.Image = Image.open("data/img/default_bg.png")
 
-    fg: Image.Image = Image.open("data/img/template_DMI.png")
+    fg: Image.Image = Image.open(f"data/img/template_{template}.png")
 
     orig_w, orig_h = im.size  # size of the bg image
     temp_w, temp_h = fg.size  # size of the template image
     if config_map['image']['resize_mode'] == "crop":  # crops the image in the center
         im = im.crop(box=((orig_w - temp_w) / 2, (orig_h - temp_h) / 2, (orig_w + temp_w) / 2, (orig_h + temp_h) / 2))
         im = im.resize(fg.size)  # resize if it's too small
-    elif config_map['image']['resize_mode'] == "resize":  # resizes the image so that it fits (ignores proportions)
+    elif config_map['image']['resize_mode'] == "scale":  # scales the image so that it fits (ignores proportions)
         im = im.resize(fg.size)
 
     im.paste(fg, box=(0, 0), mask=fg)  # paste the template foreground

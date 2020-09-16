@@ -1,0 +1,6 @@
+debug:
+  local_log: false
+token: ''
+webhook:
+  enabled: false
+  url: ''

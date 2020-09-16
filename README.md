@@ -31,7 +31,7 @@ Listed in requirements.txt
 	- **webhook:**
 		- **enabled:** whether or not the bot should use webhook (false recommended for local)
 		- **url:** the url used by the webhook
-- Edit the images desired in "data/img"
+- Edit the images desired in "data/img". These images WON'T be blurred by the bot
 - **Run** `python3 main.py`
 
 ## :whale: Setting up a Docker container
@@ -42,7 +42,7 @@ Listed in requirements.txt
 ### Steps:
 - Clone this repository
 - In "config/settings.yaml.dist", edit the desired values. Be mindful that the one listed below will overwrite the ones in "config/settings.yaml.dist", even if they aren't used in the command line
-- Edit the images desired in "data/img"
+- Edit the images desired in "data/img". These images WON'T be blurred by the bot
 - **Run** `docker build --tag botimage --build-arg TOKEN=<token_arg> [...] .` 
 
 | In the command line <br>(after each --build-arg) | Type | Function | Optional |

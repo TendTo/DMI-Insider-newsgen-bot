@@ -219,7 +219,7 @@ def send_image(bot: Bot, chat_id: int, title: str, caption: str, photo_path: str
     if os.path.exists(photo_path):
         im: Image.Image = Image.open(photo_path).filter(ImageFilter.GaussianBlur(config_map['image']['blur']))
     else:
-        im: Image.Image = Image.open("data/img/default_bg.png")
+        im: Image.Image = Image.open(f"data/img/bg_{template}.png")
 
     fg: Image.Image = Image.open(f"data/img/template_{template}.png")
 

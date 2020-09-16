@@ -1,11 +1,11 @@
 """Handles the commands"""
 import os
 import textwrap
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from telegram import Update, ParseMode, Bot
 from telegram.ext import CallbackContext
 from modules.commands.command_utility import get_message_info
-from modules.data.data_reader import read_md
+from modules.data.data_reader import read_md, config_map
 
 STATE = {'background': 1, 'title': 2, 'caption': 3, 'end': -1}  # represents the various states for the creation of the image
 
@@ -195,13 +195,20 @@ def send_image(bot: Bot, chat_id: int, title: str, caption: str, photo_path: str
         photo_path (str): path where the image is stored
     """
     if os.path.exists(photo_path):
-        im: Image.Image = Image.open(photo_path)
+        im: Image.Image = Image.open(photo_path).filter(ImageFilter.GaussianBlur(config_map['image']['blur']))
     else:
         im: Image.Image = Image.open("data/img/default_bg.png")
 
-    fg: Image.Image = Image.open("data/img/template.png")
+    fg: Image.Image = Image.open("data/img/template_DMI.png")
 
-    im = im.resize(fg.size)
+    orig_w, orig_h = im.size  # size of the bg image
+    temp_w, temp_h = fg.size  # size of the template image
+    if config_map['image']['resize_mode'] == "crop":  # crops the image in the center
+        im = im.crop(box=((orig_w - temp_w) / 2, (orig_h - temp_h) / 2, (orig_w + temp_w) / 2, (orig_h + temp_h) / 2))
+        im = im.resize(fg.size)  # resize if it's too small
+    elif config_map['image']['resize_mode'] == "resize":  # resizes the image so that it fits (ignores proportions)
+        im = im.resize(fg.size)
+
     im.paste(fg, box=(0, 0), mask=fg)  # paste the template foreground
 
     draw_im = ImageDraw.Draw(im)

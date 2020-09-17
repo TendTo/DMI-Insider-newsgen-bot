@@ -1,2 +1,2 @@
 *Titolo accettato*
-Inviare la caption dell'immagine
+Inviare la descrizione dell'immagine

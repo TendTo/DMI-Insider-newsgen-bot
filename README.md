@@ -1,7 +1,7 @@
 # DMI-Insider-newsgen-bot
 
 ### Usage
-Live version on telegram [**@testtendTo_bot**](https://telegram.me/testtendTo_bot) (only temporarily)
+Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_Bot) (only temporarily)
 
 ## :wrench: Setting up a local istance
 

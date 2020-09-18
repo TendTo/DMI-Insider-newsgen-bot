@@ -1,12 +1,20 @@
 debug:
   local_log: false
-image:
-  resize_mode: 'scale'
-  blur: 10
 groups:
   - 0
   - 0
   - 0
+image:
+  blur: 10
+  resize_mode: 'scale'
+  thread: false
+test:
+  api_hash: ''
+  api_id: ''
+  groups: []
+  session: ''
+  tag: ''
+  token: ''
 token: ''
 webhook:
   enabled: false

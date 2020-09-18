@@ -1,13 +1,12 @@
 """Handles the commands"""
 import os
+from threading import Thread
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from telegram import Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from modules.commands.command_utility import get_message_info, get_callback_info
 from modules.data.data_reader import read_md, config_map
-if config_map['image']['thread']:
-    from threading import Thread
 
 STATE = {
     'background': 1,
@@ -64,7 +63,7 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     inline_keyboard = None
     return_state = STATE['end']
-    if info['chat_id'] not in config_map['groups']:  # the group is not among the allowed ones
+    if config_map['groups'] and info['chat_id'] not in config_map['groups']:  # the group is not among the allowed ones
         text = "Questo gruppo/chat non è fra quelli supportati"
     elif os.path.exists(f"data/img/{str(info['sender_id'])}.png"):  # if the bot is already making an image for the user
         text = read_md("create_fail")

@@ -244,7 +244,7 @@ def create_image(data: dict, photo_path: str):
 
     fg: Image.Image = Image.open(f"data/img/template_{template}.png")
 
-    resize_image(im=im, fg=fg)  # resize the image with the chosen method
+    im = resize_image(im=im, fg=fg)  # resize the image with the chosen method
 
     im.paste(fg, box=(0, 0), mask=fg)  # paste the template foreground
 
@@ -274,6 +274,7 @@ def resize_image(im: Image, fg: Image):
         im = im.resize(fg.size)  # resize if it's too small
     elif config_map['image']['resize_mode'] == "scale":  # scales the image so that it fits (ignores proportions)
         im = im.resize(fg.size)
+    return im
 
 
 def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -> int:

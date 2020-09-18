@@ -13,7 +13,7 @@ Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_
 - python-pip3
 
 #### Install with *pip3*
-Listed in requirements.txt:
+Listed in requirements.txt. The main ones are:
 - python-telegram-bot
 - requests
 - PyYAML

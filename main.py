@@ -2,6 +2,7 @@
 # region imports
 # libs
 import os
+import warnings
 # telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler,\
      Filters, Dispatcher
@@ -57,5 +58,7 @@ def main():
     updater.idle()
 
 
+warnings.filterwarnings("ignore",
+                        message="If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message.")
 if __name__ == "__main__":
     main()

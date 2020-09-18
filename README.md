@@ -1,7 +1,7 @@
 # DMI-Insider-newsgen-bot
 
 ## Usage
-This bot is meant to easily generate images with a set template for the DMI-Insider association 
+This bot is meant to easily generate images with a set template for the DMI-Insider collective 
 
 ## :red_circle: Try it live
 Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_Bot)

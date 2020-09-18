@@ -1,9 +1,6 @@
 debug:
   local_log: false
-groups:
-  - 0
-  - 0
-  - 0
+groups: []
 image:
   blur: 10
   resize_mode: 'scale'

@@ -311,4 +311,6 @@ async def test_create_photo_crop_conversation(client: TelegramClient):
         assert resp.photo is not None
 
         await resp.click(text="Genera")  # click inline keyboard
-        resp: Message = await conv.get_response()
+        resp: Message = await conv.get_edit()
+
+        assert resp.photo is not None

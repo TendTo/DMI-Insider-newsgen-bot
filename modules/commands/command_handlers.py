@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from telegram import Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from modules.various.utils import get_message_info, get_callback_info
-from modules.various.photo_utils import build_photo_path, generate_photo, send_image
+from modules.various.photo_utils import build_photo_path, generate_photo, send_image, build_bg_path
 from modules.data.data_reader import read_md, config_map
 
 STATE = {
@@ -156,19 +156,25 @@ def background_msg(update: Update, context: CallbackContext) -> int:
 
     if photo:  # if an actual photo was sent
         bg_image = info['bot'].getFile(photo[-1].file_id)
-        bg_image.download(build_photo_path(sender_id))
+        bg_image.download(build_bg_path(sender_id))
 
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
     # Fill default image's tuning settings
-    context.user_data['background_offset'] = {
-        'x': 0,
-        'y': 0,
-    }
+    if config_map['image']['resize_mode'] == "crop": 
+        context.user_data['background_offset'] = {
+            'x': 0,
+            'y': 0,
+        }
 
     generate_photo(info, context.user_data)
 
-    return STATE['tune']
+    if config_map['image']['resize_mode'] == "crop":
+        return STATE['tune']
+    else:
+        os.remove(build_photo_path(sender_id)) 
+        os.remove(build_bg_path(sender_id)) 
+        return STATE['end']
 
 def fail_msg(update: Update, context: CallbackContext) -> None:
     """Handles the fail message
@@ -185,43 +191,3 @@ def fail_msg(update: Update, context: CallbackContext) -> None:
     info = get_message_info(update, context)
     text = read_md("fail")
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
-
-def resize_image(im: Image, fg: Image, offset: dict):
-    """Resizes the image with the method specified in the "config/settings.yaml" file
-
-    Args:
-        im (Image): image to resize
-        fg (Image): images wich dimensions will be used to resize the former image
-    """
-    orig_w, orig_h = im.size  # size of the bg image
-    temp_w, temp_h = fg.size  # size of the template image
-    if config_map['image']['resize_mode'] == "crop":  # crops the image in the center
-        im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2, (orig_w + temp_w) / 2 + offset['y'], (orig_h + temp_h) / 2))
-        im = im.resize(fg.size)  # resize if it's too small
-    elif config_map['image']['resize_mode'] == "scale":  # scales the image so that it fits (ignores proportions)
-        im = im.resize(fg.size)
-    return im
-
-def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -> int:
-    """Draws the text on the image of width w, starting at height y_text
-
-    Args:
-        draw_im (ImageDraw): image to draw on
-        w (int): with of the image
-        text (str): text to write
-        y_text (int): height of the text
-        font (any): font of the text
-
-    Returns:
-        int: final height of the text
-    """
-    return_text = text.split("\n")  # split the title based on the return char \n
-    multiline_text = []
-    for return_line in return_text:
-        for line in textwrap.wrap(return_line, width=35):  # split the line based on the lenght of the string
-            multiline_text.append(line)
-    for line in multiline_text:  # write each line of the title
-        t_w, t_h = font.getsize(line)
-        draw_im.multiline_text(xy=((w - t_w) / 2, y_text), text=line, fill="white", font=font)
-        y_text += t_h
-    return y_text

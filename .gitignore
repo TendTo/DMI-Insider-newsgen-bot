@@ -33,6 +33,7 @@ MANIFEST
 
 # Venv
 .venv
+env/
 
 # Installer logs
 pip-log.txt

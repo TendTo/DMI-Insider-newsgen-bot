@@ -39,7 +39,7 @@ def add_handlers(dp: Dispatcher):
                 STATE['title']: [MessageHandler(Filters.text & ~Filters.command, title_msg)],
                 STATE['caption']: [MessageHandler(Filters.text & ~Filters.command, caption_msg)],
                 STATE['tune']: [
-                    CallbackQueryHandler(image_crop_callback, pattern="image_crop")
+                    CallbackQueryHandler(image_crop_callback, pattern="image_crop,*")
                 ]
             },
             fallbacks=[CommandHandler('cancel', cancel_cmd),

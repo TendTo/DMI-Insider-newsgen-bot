@@ -12,7 +12,9 @@ from modules.debug.log_manager import log_message
 from modules.data.data_reader import config_map
 # commands
 from modules.commands.command_handlers import STATE, start_cmd, help_cmd, create_cmd, background_msg, title_msg, caption_msg,\
-    cancel_cmd, fail_msg, template_callback
+    cancel_cmd, fail_msg
+# callbacks
+from modules.callbacks.callback_handlers import template_callback, image_crop_callback
 # endregion
 
 
@@ -35,7 +37,10 @@ def add_handlers(dp: Dispatcher):
                 STATE['background']:
                 [MessageHandler(Filters.photo | (Filters.text & Filters.regex(r"^[Nn]one$")), background_msg)],
                 STATE['title']: [MessageHandler(Filters.text & ~Filters.command, title_msg)],
-                STATE['caption']: [MessageHandler(Filters.text & ~Filters.command, caption_msg)]
+                STATE['caption']: [MessageHandler(Filters.text & ~Filters.command, caption_msg)],
+                STATE['tune']: [
+                    CallbackQueryHandler(image_crop_callback, pattern="image_crop")
+                ]
             },
             fallbacks=[CommandHandler('cancel', cancel_cmd),
                        MessageHandler(Filters.all & ~Filters.command, fail_msg)],

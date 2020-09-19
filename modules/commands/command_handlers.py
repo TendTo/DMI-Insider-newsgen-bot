@@ -5,7 +5,8 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from telegram import Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from modules.commands.command_utility import get_message_info, get_callback_info
+from modules.various.utils import get_message_info, get_callback_info
+from modules.various.photo_utils import build_photo_path, generate_photo, send_image
 from modules.data.data_reader import read_md, config_map
 
 STATE = {
@@ -13,6 +14,7 @@ STATE = {
     'template': 2,
     'title': 3,
     'caption': 4,
+    'tune': 5,
     'end': -1
 }  # represents the various states for the creation of the image
 TEMPLATE = {
@@ -20,7 +22,6 @@ TEMPLATE = {
     'matematica': "data/img/template_matematica.png",
     'informatica': "data/img/template_informatica.png"
 }
-
 
 def start_cmd(update: Update, context: CallbackContext):
     """Handles the /start command
@@ -100,29 +101,6 @@ def cancel_cmd(update: Update, context: CallbackContext) -> int:
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['end']
 
-
-def template_callback(update: Update, context: CallbackContext) -> int:
-    """Handles the template callback
-    Select the desidered template
-    Puts the conversation in the "title" state
-
-    Args:
-        update (Update): update event
-        context (CallbackContext): context passed by the handler
-
-    Returns:
-        int: new state of the conversation
-    """
-    info = get_callback_info(update, context)
-    context.user_data['template'] = update.callback_query.data[9:]
-    text = read_md("template")
-    info['bot'].edit_message_text(chat_id=info['chat_id'],
-                                  message_id=info['message_id'],
-                                  text=text,
-                                  parse_mode=ParseMode.MARKDOWN_V2)
-    return STATE['title']
-
-
 def title_msg(update: Update, context: CallbackContext) -> int:
     """Handles the title message
     Saves the title so it can be used as the title of the image
@@ -173,22 +151,24 @@ def background_msg(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     text = read_md("background")
     photo = update.message.photo
-    photo_path = f"data/img/{str(info['sender_id'])}.png"  # the user_id indentifies the image of each user
+
+    sender_id = info['sender_id']
 
     if photo:  # if an actual photo was sent
         bg_image = info['bot'].getFile(photo[-1].file_id)
-        bg_image.download(photo_path)
+        bg_image.download(build_photo_path(sender_id))
 
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
-    if config_map['image']['thread']:
-        t = Thread(target=send_image, args=(info, context.user_data, photo_path))
-        t.start()
-    else:
-        send_image(info=info, data=context.user_data, photo_path=photo_path)
+    # Fill default image's tuning settings
+    context.user_data['background_offset'] = {
+        'x': 0,
+        'y': 0,
+    }
 
-    return STATE['end']
+    generate_photo(info, context.user_data)
 
+    return STATE['tune']
 
 def fail_msg(update: Update, context: CallbackContext) -> None:
     """Handles the fail message
@@ -206,61 +186,7 @@ def fail_msg(update: Update, context: CallbackContext) -> None:
     text = read_md("fail")
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
-
-def send_image(info: dict, data: dict, photo_path: str):
-    """Creates and sends the requested image
-
-    Args:
-        info (dict): {'bot': bot used to send the image, 'chat_id': id of the chat that will receive the image}
-        data (dict): {'title': title of the image, 'caption': caption of the image, 'template': template to be used}
-        photo_path (str): path where the image is stored
-    """
-    bot = info['bot']
-    chat_id = info['chat_id']
-
-    create_image(data=data, photo_path=photo_path)
-
-    fd = open(photo_path, "rb")
-    bot.send_photo(chat_id=chat_id, photo=fd)
-    fd.close()
-    os.remove(photo_path)  # free the space no longer needed on disk
-
-
-def create_image(data: dict, photo_path: str):
-    """Creates the image with the data provided
-
-    Args:
-        data (dict): {'title': title of the image, 'caption': caption of the image, 'template': template to be used}
-        photo_path (str): path that will be used to save the image
-    """
-    title = data['title']
-    caption = data['caption']
-    template = data['template']
-
-    if os.path.exists(photo_path):
-        im: Image.Image = Image.open(photo_path).filter(ImageFilter.GaussianBlur(config_map['image']['blur']))
-    else:
-        im: Image.Image = Image.open(f"data/img/bg_{template}.png")
-
-    fg: Image.Image = Image.open(f"data/img/template_{template}.png")
-
-    im = resize_image(im=im, fg=fg)  # resize the image with the chosen method
-
-    im.paste(fg, box=(0, 0), mask=fg)  # paste the template foreground
-
-    draw_im = ImageDraw.Draw(im)
-    font = ImageFont.truetype("data/font/UbuntuCondensed-Regular.ttf", 33)
-    w, h = im.size
-
-    y_title = draw_text(draw_im=draw_im, w=w, text=title, y_text=h / 2 - 120, font=font)  # draw the title
-    draw_text(draw_im=draw_im, w=w, text=caption, y_text=max(y_title + 30, h / 2 - 20), font=font)  # draw the caption
-
-    im.save(photo_path)
-    im.close()
-    fg.close()
-
-
-def resize_image(im: Image, fg: Image):
+def resize_image(im: Image, fg: Image, offset: dict):
     """Resizes the image with the method specified in the "config/settings.yaml" file
 
     Args:
@@ -270,12 +196,11 @@ def resize_image(im: Image, fg: Image):
     orig_w, orig_h = im.size  # size of the bg image
     temp_w, temp_h = fg.size  # size of the template image
     if config_map['image']['resize_mode'] == "crop":  # crops the image in the center
-        im = im.crop(box=((orig_w - temp_w) / 2, (orig_h - temp_h) / 2, (orig_w + temp_w) / 2, (orig_h + temp_h) / 2))
+        im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2, (orig_w + temp_w) / 2 + offset['y'], (orig_h + temp_h) / 2))
         im = im.resize(fg.size)  # resize if it's too small
     elif config_map['image']['resize_mode'] == "scale":  # scales the image so that it fits (ignores proportions)
         im = im.resize(fg.size)
     return im
-
 
 def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -> int:
     """Draws the text on the image of width w, starting at height y_text

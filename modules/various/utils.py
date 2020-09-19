@@ -1,7 +1,6 @@
-"""Common operation for each command_handle module"""
+"""Common operation for each command/callback"""
 from telegram import Update
 from telegram.ext import CallbackContext
-
 
 def get_message_info(update: Update, context: CallbackContext) -> dict:
     """Get the classic info from the update and context parameters
@@ -22,7 +21,6 @@ def get_message_info(update: Update, context: CallbackContext) -> dict:
         'sender_id': update.message.from_user.id
     }
 
-
 def get_callback_info(update: Update, context: CallbackContext) -> dict:
     """Get the classic info from the update and context parameters for callbacks
 
@@ -39,5 +37,6 @@ def get_callback_info(update: Update, context: CallbackContext) -> dict:
         'text': update.callback_query.message.text,
         'message_id': update.callback_query.message.message_id,
         'sender_first_name': update.callback_query.from_user.first_name,
-        'sender_id': update.callback_query.from_user.id
+        'sender_id': update.callback_query.from_user.id,
+        'query_data': update.callback_query.data
     }

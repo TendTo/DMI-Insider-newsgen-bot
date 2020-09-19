@@ -3,7 +3,7 @@ debug:
 groups: []
 image:
   blur: 10
-  resize_mode: 'scale'
+  resize_mode: 'crop'
   thread: false
 test:
   api_hash: ''

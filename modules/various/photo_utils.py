@@ -1,33 +1,60 @@
+"""Generates the image based on the user's settings"""
 import os
+from typing import Optional
 from threading import Thread
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
-from telegram import Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, InputFile
-from telegram.ext import CallbackContext
-from modules.various.utils import get_message_info, get_callback_info
-from modules.data.data_reader import read_md, config_map
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from modules.data.data_reader import config_map
 
-def build_bg_path(sender_id):
+
+def build_bg_path(sender_id: int) -> str:
+    """Builds the path for the background image sent by the user
+
+    Args:
+        sender_id (int): id of the userd that sent the image
+
+    Returns:
+        str: path where to save/find the image
+    """
     return f"data/img/bg_{str(sender_id)}.png"  # the user_id indentifies the image of each user
-    
-def build_photo_path(sender_id):
+
+
+def build_photo_path(sender_id: int) -> str:
+    """Builds the path for the edited image requested by the user
+
+    Args:
+        sender_id (int): id of the userd that sent the image
+
+    Returns:
+        str: path where to save/find the image
+    """
     return f"data/img/{str(sender_id)}.png"  # the user_id indentifies the image of each user
 
-def generate_photo(info, user_data, message_id = None):
+
+def generate_photo(info: dict, user_data: dict, message_id: Optional[int] = None):
+    """Generates the image based on the user's settings
+
+    Args:
+        info (dict): {'bot': bot used to send the image, 'chat_id': id of the chat that will receive the image}
+        data (dict): {'title': title of the image, 'caption': caption of the image, 'template': template to be used, 'background_offset': offset used to crop the image}
+        message_id (Optional[int], optional): id of the previous message that needs to be deleted. Defaults to None.
+    """
     photo_path = build_photo_path(info['sender_id'])
 
-    if config_map['image']['thread']:
-        t = Thread(target=send_image, args=(info, user_data, photo_path, message_id))
-        t.start()
-    else:
-        send_image(info=info, data=user_data, photo_path=photo_path, message_id=message_id)
+    # if config_map['image']['thread']:
+    #     t = Thread(target=send_image, args=(info, user_data, photo_path, message_id))
+    #     t.start()
+    # else:
+    send_image(info=info, data=user_data, photo_path=photo_path, message_id=message_id)
 
-def send_image(info: dict, data: dict, photo_path: str, message_id = None):
+
+def send_image(info: dict, data: dict, photo_path: str, message_id=None):
     """Creates and sends the requested image
 
     Args:
         info (dict): {'bot': bot used to send the image, 'chat_id': id of the chat that will receive the image}
-        data (dict): {'title': title of the image, 'caption': caption of the image, 'template': template to be used}
+        data (dict): {'title': title of the image, 'caption': caption of the image, 'template': template to be used, 'background_offset': offset used to crop the image}
         photo_path (str): path where the image is stored
     """
     bot = info['bot']
@@ -39,18 +66,21 @@ def send_image(info: dict, data: dict, photo_path: str, message_id = None):
         reply_markup = InlineKeyboardMarkup([
             [InlineKeyboardButton(" -- Posizione sfondo --", callback_data="_")],
             [
-                InlineKeyboardButton(" ", callback_data="_"),
-                InlineKeyboardButton("⬆️", callback_data="image_crop,up"),
-                InlineKeyboardButton(" ", callback_data="_")
-            ],[
-                InlineKeyboardButton("️️⬅️", callback_data="image_crop,left"),
-                InlineKeyboardButton("️Reset", callback_data="image_crop,reset"),
-                InlineKeyboardButton("➡️", callback_data="image_crop,right")
-            ],[
-                InlineKeyboardButton(" ", callback_data="_"),
-                InlineKeyboardButton("⬇️", callback_data="image_crop,down"),
-                InlineKeyboardButton(" ", callback_data="_")
-            ],[InlineKeyboardButton("Genera", callback_data="image_crop,finish")],
+                InlineKeyboardButton("↖️", callback_data="image_crop_up-left"),
+                InlineKeyboardButton("⬆️", callback_data="image_crop_up"),
+                InlineKeyboardButton("↗️", callback_data="image_crop_up-right")
+            ],
+            [
+                InlineKeyboardButton("️️⬅️", callback_data="image_crop_left"),
+                InlineKeyboardButton("️Reset", callback_data="image_crop_reset"),
+                InlineKeyboardButton("➡️", callback_data="image_crop_right")
+            ],
+            [
+                InlineKeyboardButton("↙️", callback_data="image_crop_down-left"),
+                InlineKeyboardButton("⬇️", callback_data="image_crop_down"),
+                InlineKeyboardButton("↘️", callback_data="image_crop_down-right")
+            ],
+            [InlineKeyboardButton("Genera", callback_data="image_crop_finish")],
         ])
     else:
         reply_markup = None
@@ -64,6 +94,7 @@ def send_image(info: dict, data: dict, photo_path: str, message_id = None):
 
     fd.close()
 
+
 def create_image(data: dict, sender_id: int, photo_path: str):
     """Creates the image with the data provided
 
@@ -74,7 +105,7 @@ def create_image(data: dict, sender_id: int, photo_path: str):
     title = data['title']
     caption = data['caption']
     template = data['template']
-    background_offset = data['background_offset']
+    background_offset = data['background_offset'] if config_map['image']['resize_mode'] == "crop" else None
 
     # Load background
     background_path = build_bg_path(sender_id)
@@ -102,26 +133,28 @@ def create_image(data: dict, sender_id: int, photo_path: str):
     im.close()
     fg.close()
 
-def resize_image(im: Image, fg: Image, offset: dict):
+
+def resize_image(im: Image, fg: Image, offset: dict) -> Image:
     """Resizes the image with the method specified in the "config/settings.yaml" file
 
     Args:
         im (Image): image to resize
         fg (Image): images wich dimensions will be used to resize the former image
+        offset (dict): offset used to crop the image
+
+    Returns:
+        Image: newly resized image
     """
     orig_w, orig_h = im.size  # size of the bg image
     temp_w, temp_h = fg.size  # size of the template image
     if config_map['image']['resize_mode'] == "crop":  # crops the image in the center
-        im = im.crop(box=(
-            (orig_w - temp_w) / 2 + offset['x'],
-            (orig_h - temp_h) / 2 + offset['y'],
-            (orig_w + temp_w) / 2 + offset['x'],
-            (orig_h + temp_h) / 2 + offset['y']
-        ))
+        im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2 + offset['y'],
+                          (orig_w + temp_w) / 2 + offset['x'], (orig_h + temp_h) / 2 + offset['y']))
         im = im.resize(fg.size)  # resize if it's too small
     elif config_map['image']['resize_mode'] == "scale":  # scales the image so that it fits (ignores proportions)
         im = im.resize(fg.size)
     return im
+
 
 def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -> int:
     """Draws the text on the image of width w, starting at height y_text

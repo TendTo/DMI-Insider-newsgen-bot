@@ -1,12 +1,9 @@
 """Handles the commands"""
 import os
-from threading import Thread
-import textwrap
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from telegram import Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from modules.various.utils import get_message_info, get_callback_info
-from modules.various.photo_utils import build_photo_path, generate_photo, send_image, build_bg_path
+from modules.various.utils import get_message_info
+from modules.various.photo_utils import build_photo_path, generate_photo, build_bg_path
 from modules.data.data_reader import read_md, config_map
 
 STATE = {
@@ -22,6 +19,7 @@ TEMPLATE = {
     'matematica': "data/img/template_matematica.png",
     'informatica': "data/img/template_informatica.png"
 }
+
 
 def start_cmd(update: Update, context: CallbackContext):
     """Handles the /start command
@@ -101,6 +99,7 @@ def cancel_cmd(update: Update, context: CallbackContext) -> int:
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['end']
 
+
 def title_msg(update: Update, context: CallbackContext) -> int:
     """Handles the title message
     Saves the title so it can be used as the title of the image
@@ -161,7 +160,7 @@ def background_msg(update: Update, context: CallbackContext) -> int:
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
     # Fill default image's tuning settings
-    if config_map['image']['resize_mode'] == "crop": 
+    if config_map['image']['resize_mode'] == "crop":
         context.user_data['background_offset'] = {
             'x': 0,
             'y': 0,
@@ -172,9 +171,11 @@ def background_msg(update: Update, context: CallbackContext) -> int:
     if config_map['image']['resize_mode'] == "crop":
         return STATE['tune']
     else:
-        os.remove(build_photo_path(sender_id)) 
-        os.remove(build_bg_path(sender_id)) 
+        if os.path.exists(build_bg_path(sender_id)):
+            os.remove(build_bg_path(sender_id))
+        os.remove(build_photo_path(sender_id))
         return STATE['end']
+
 
 def fail_msg(update: Update, context: CallbackContext) -> None:
     """Handles the fail message

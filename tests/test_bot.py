@@ -6,7 +6,7 @@ from telethon.tl.custom.message import Message
 from telethon.tl.custom.conversation import Conversation
 from modules.data.data_reader import config_map, read_md
 
-TIMEOUT = 4
+TIMEOUT = 8
 bot_tag = config_map['test']['tag']
 
 
@@ -56,21 +56,6 @@ async def test_help_cmd(client: TelegramClient):
         resp: Message = await conv.get_response()
 
         assert read_md("help") == get_telegram_md(resp.text)
-
-
-@pytest.mark.asyncio
-async def test_create_cmd(client: TelegramClient):
-    """Tests the create command
-
-    Args:
-        client (TelegramClient): client used to simulate the user
-    """
-    conv: Conversation
-    async with client.conversation(bot_tag, timeout=TIMEOUT) as conv:
-        await conv.send_message("/create")  # send a command
-        resp: Message = await conv.get_response()
-
-        assert read_md("create") == get_telegram_md(resp.text)
 
 
 @pytest.mark.asyncio
@@ -130,58 +115,21 @@ async def test_fail_conversation(client: TelegramClient):
         resp: Message = await conv.get_response()
         await conv.send_message("Test descrizione")  # send a message
         resp: Message = await conv.get_response()
+        await resp.click(text="Ridimensiona")  # click inline keyboard
+        resp: Message = await conv.get_edit()
         await conv.send_message("Fail message")  # send a message
         resp: Message = await conv.get_response()
 
         assert read_md("fail") == get_telegram_md(resp.text)
 
+        await conv.send_message("/cancel")  # send a command
+        resp: Message = await conv.get_response()
 
-# threding is disabled for now
-
-# @pytest.mark.asyncio
-# async def test_create_none_thread_conversation(client: TelegramClient):
-#     """Tests the whole flow of the create conversation with the default image
-#     The image creation is handled by a newly created thread
-
-#     Args:
-#         client (TelegramClient): client used to simulate the user
-#     """
-#     config_map['image']['thread'] = True
-#     config_map['image']['resize_mode'] = "scale"
-#     conv: Conversation
-#     async with client.conversation(bot_tag, timeout=TIMEOUT * 4) as conv:
-#         await conv.send_message("/create")  # send a command
-#         resp: Message = await conv.get_response()
-
-#         assert read_md("create") == get_telegram_md(resp.text)
-
-#         await resp.click(text="DMI")  # click inline keyboard
-#         resp: Message = await conv.get_edit()
-
-#         assert read_md("template") == get_telegram_md(resp.text)
-
-#         await conv.send_message("Test titolo")  # send a message
-#         resp: Message = await conv.get_response()
-
-#         assert read_md("title") == get_telegram_md(resp.text)
-
-#         await conv.send_message("Test descrizione")  # send message
-#         resp: Message = await conv.get_response()
-
-#         assert read_md("caption") == get_telegram_md(resp.text)
-
-#         await conv.send_message("none")  # send message
-#         resp: Message = await conv.get_response()
-
-#         assert read_md("background") == get_telegram_md(resp.text)
-
-#         resp: Message = await conv.get_response()
-
-#         assert resp.photo is not None
+        assert read_md("cancel") == get_telegram_md(resp.text)
 
 
 @pytest.mark.asyncio
-async def test_create_none_non_thread_conversation(client: TelegramClient):
+async def test_create_scale_conversation(client: TelegramClient):
     """Tests the whole flow of the create conversation with the default image
     The image creation is handled by the main thread
 
@@ -189,7 +137,6 @@ async def test_create_none_non_thread_conversation(client: TelegramClient):
         client (TelegramClient): client used to simulate the user
     """
     config_map['image']['thread'] = False
-    config_map['image']['resize_mode'] = "scale"
     conv: Conversation
     async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
         await conv.send_message("/create")  # send a command
@@ -212,7 +159,10 @@ async def test_create_none_non_thread_conversation(client: TelegramClient):
 
         assert read_md("caption") == get_telegram_md(resp.text)
 
-        await conv.send_message("none")  # send message
+        await resp.click(text="Ridimensiona")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        await conv.send_file("data/img/bg_test.png")  # send message
         resp: Message = await conv.get_response()
 
         assert read_md("background") == get_telegram_md(resp.text)
@@ -223,7 +173,7 @@ async def test_create_none_non_thread_conversation(client: TelegramClient):
 
 
 @pytest.mark.asyncio
-async def test_create_photo_non_thread_conversation(client: TelegramClient):
+async def test_create_crop_conversation(client: TelegramClient):
     """Tests the whole flow of the create conversation with the user provided image
     The image creation is handled by the main thread
 
@@ -231,7 +181,6 @@ async def test_create_photo_non_thread_conversation(client: TelegramClient):
         client (TelegramClient): client used to simulate the user
     """
     config_map['image']['thread'] = False
-    config_map['image']['resize_mode'] = "scale"
     conv: Conversation
     async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
         await conv.send_message("/create")  # send a command
@@ -254,49 +203,12 @@ async def test_create_photo_non_thread_conversation(client: TelegramClient):
 
         assert read_md("caption") == get_telegram_md(resp.text)
 
-        await conv.send_file("data/img/bg_DMI.png")  # send message
-        resp: Message = await conv.get_response()
-
-        assert read_md("background") == get_telegram_md(resp.text)
-
-        resp: Message = await conv.get_response()
-
-        assert resp.photo is not None
-
-
-@pytest.mark.asyncio
-async def test_create_photo_crop_conversation(client: TelegramClient):
-    """Tests the whole flow of the create conversation with the user provided image
-    The image creation is handled by the main thread
-
-    Args:
-        client (TelegramClient): client used to simulate the user
-    """
-    config_map['image']['thread'] = False
-    config_map['image']['resize_mode'] = "crop"
-    conv: Conversation
-    async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
-        await conv.send_message("/create")  # send a command
-        resp: Message = await conv.get_response()
-
-        assert read_md("create") == get_telegram_md(resp.text)
-
-        await resp.click(text="DMI")  # click inline keyboard
+        await resp.click(text="Ritaglia")  # click inline keyboard
         resp: Message = await conv.get_edit()
 
-        assert read_md("template") == get_telegram_md(resp.text)
+        assert read_md("resize_mode") == get_telegram_md(resp.text)
 
-        await conv.send_message("Test titolo")  # send a message
-        resp: Message = await conv.get_response()
-
-        assert read_md("title") == get_telegram_md(resp.text)
-
-        await conv.send_message("Test descrizione")  # send message
-        resp: Message = await conv.get_response()
-
-        assert read_md("caption") == get_telegram_md(resp.text)
-
-        await conv.send_file("data/img/bg_DMI.png")  # send message
+        await conv.send_file("data/img/bg_test.png")  # send message
         resp: Message = await conv.get_response()
 
         assert read_md("background") == get_telegram_md(resp.text)
@@ -311,6 +223,217 @@ async def test_create_photo_crop_conversation(client: TelegramClient):
         assert resp.photo is not None
 
         await resp.click(text="Genera")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert resp.photo is not None
+
+@pytest.mark.asyncio
+async def test_create_random_conversation(client: TelegramClient):
+    """Tests the whole flow of the create conversation with the user provided image
+    The image creation is handled by the main thread
+
+    Args:
+        client (TelegramClient): client used to simulate the user
+    """
+    config_map['image']['thread'] = False
+    conv: Conversation
+    async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
+        await conv.send_message("/create")  # send a command
+        resp: Message = await conv.get_response()
+
+        assert read_md("create") == get_telegram_md(resp.text)
+
+        await resp.click(text="DMI")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("template") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test titolo")  # send a message
+        resp: Message = await conv.get_response()
+
+        assert read_md("title") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test descrizione")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("caption") == get_telegram_md(resp.text)
+
+        await resp.click(text="Mi sento 🍀")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("resize_mode") == get_telegram_md(resp.text)
+
+        await conv.send_file("data/img/bg_test.png")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("background") == get_telegram_md(resp.text)
+
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="No, ritenta")  # click inline keyboard
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="Si")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert resp.photo is not None
+
+
+@pytest.mark.asyncio
+async def test_create_scale_thread_conversation(client: TelegramClient):
+    """Tests the whole flow of the create conversation with the default image
+    The image creation is handled by a newly created thread
+
+    Args:
+        client (TelegramClient): client used to simulate the user
+    """
+    config_map['image']['thread'] = True
+    conv: Conversation
+    async with client.conversation(bot_tag, timeout=TIMEOUT * 4) as conv:
+        await conv.send_message("/create")  # send a command
+        resp: Message = await conv.get_response()
+
+        assert read_md("create") == get_telegram_md(resp.text)
+
+        await resp.click(text="DMI")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("template") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test titolo")  # send a message
+        resp: Message = await conv.get_response()
+
+        assert read_md("title") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test descrizione")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("caption") == get_telegram_md(resp.text)
+
+        await resp.click(text="Ridimensiona")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("resize_mode") == get_telegram_md(resp.text)
+
+        await conv.send_message("none")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("background") == get_telegram_md(resp.text)
+
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+@pytest.mark.asyncio
+async def test_create_crop_thread_conversation(client: TelegramClient):
+    """Tests the whole flow of the create conversation with the user provided image
+    The image creation is handled by the main thread
+
+    Args:
+        client (TelegramClient): client used to simulate the user
+    """
+    config_map['image']['thread'] = True
+    conv: Conversation
+    async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
+        await conv.send_message("/create")  # send a command
+        resp: Message = await conv.get_response()
+
+        assert read_md("create") == get_telegram_md(resp.text)
+
+        await resp.click(text="DMI")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("template") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test titolo")  # send a message
+        resp: Message = await conv.get_response()
+
+        assert read_md("title") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test descrizione")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("caption") == get_telegram_md(resp.text)
+
+        await resp.click(text="Ritaglia")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("resize_mode") == get_telegram_md(resp.text)
+
+        await conv.send_message("none")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("background") == get_telegram_md(resp.text)
+
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="⬆️")  # click inline keyboard
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="Genera")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert resp.photo is not None
+
+@pytest.mark.asyncio
+async def test_create_random_thread_conversation(client: TelegramClient):
+    """Tests the whole flow of the create conversation with the user provided image
+    The image creation is handled by the main thread
+
+    Args:
+        client (TelegramClient): client used to simulate the user
+    """
+    config_map['image']['thread'] = True
+    conv: Conversation
+    async with client.conversation(bot_tag, timeout=TIMEOUT * 2) as conv:
+        await conv.send_message("/create")  # send a command
+        resp: Message = await conv.get_response()
+
+        assert read_md("create") == get_telegram_md(resp.text)
+
+        await resp.click(text="DMI")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("template") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test titolo")  # send a message
+        resp: Message = await conv.get_response()
+
+        assert read_md("title") == get_telegram_md(resp.text)
+
+        await conv.send_message("Test descrizione")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("caption") == get_telegram_md(resp.text)
+
+        await resp.click(text="Mi sento 🍀")  # click inline keyboard
+        resp: Message = await conv.get_edit()
+
+        assert read_md("resize_mode") == get_telegram_md(resp.text)
+
+        await conv.send_message("none")  # send message
+        resp: Message = await conv.get_response()
+
+        assert read_md("background") == get_telegram_md(resp.text)
+
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="No, ritenta")  # click inline keyboard
+        resp: Message = await conv.get_response()
+
+        assert resp.photo is not None
+
+        await resp.click(text="Si")  # click inline keyboard
         resp: Message = await conv.get_edit()
 
         assert resp.photo is not None

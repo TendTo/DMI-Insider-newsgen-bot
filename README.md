@@ -6,6 +6,31 @@ This bot is meant to easily generate images with a set template for the DMI-Insi
 ## :red_circle: Try it live
 Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_Bot)
 
+## Image creation flow diagram
+
+	+----V----+     +-------------------+     +-----------+     +-------------+
+	| /create +---->+ template callback +---->+ title msg +---->+ caption msg |
+	+---------+     +-------------------+     +-----------+     +------+------+
+	                                                                   |
+	                                                                   V
+	                                 +----------------+     +----------------------+
+	                                 | background_msg +<----+ resize mode callback |
+	                                 +-------+--------+     +----------------------+
+	                                         |
+	                       +----------------------------------------+
+	                       |                 |                      |
+	if resize mode =     scale              crop                  random
+	                       |                 |     +----+           |      +----+
+	                       v                 v     v    |           v      v    |
+	                 +-----+-----+   +-------+-----+-+  |  +--------+------+-+  |
+	                 | end photo |   | crop_callback +--+  | random callback +--+
+	                 +-----V-----+   +-------+-------+     +--------+--------+
+	                                         |                      |
+	                                         v                      |
+	                                   +-----+-----+          +-----+-----+
+	                                   | end photo |          | end photo |
+	                                   +-----V-----+          +-----V-----+
+
 ## :wrench: Setting up a local istance
 
 #### System requirements
@@ -27,7 +52,6 @@ Listed in requirements.txt. The main ones are:
 	- **groups:** list of chats or groups allowed to create images. If left [], all chats or groups will be allowed to create images
 	- **image**
 		- **blur:** how much blur you want to apply to the image
-		- **resize_mode:** how you want the image to be resized. Can be 'crop' or 'scale'
 		- **thread:** whether or not the image creation should be handled in a separated thread instead of the main thread
 	- **test:**
 		- **api_hash:** hash of the telegram app used for testing

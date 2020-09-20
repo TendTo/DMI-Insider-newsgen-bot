@@ -11,9 +11,12 @@ STATE = {
     'template': 2,
     'title': 3,
     'caption': 4,
-    'tune': 5,
+    'resize_mode': 5,
+    'crop': 6,
+    'random': 7,
     'end': -1
 }  # represents the various states for the creation of the image
+
 TEMPLATE = {
     'DMI': "data/img/template_DMI.png",
     'matematica': "data/img/template_matematica.png",
@@ -96,6 +99,15 @@ def cancel_cmd(update: Update, context: CallbackContext) -> int:
     """
     info = get_message_info(update, context)
     text = read_md("cancel")
+
+    # Clear the disk space used by the images, if present
+    bg_path = build_bg_path(info['sender_id'])
+    photo_path = build_photo_path(info['sender_id'])
+    if os.path.exists(bg_path):
+        os.remove(bg_path)
+    if os.path.exists(photo_path):
+        os.remove(photo_path)
+
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
     return STATE['end']
 
@@ -132,8 +144,18 @@ def caption_msg(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     context.user_data['caption'] = info['text']
     text = read_md("caption")
-    info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
-    return STATE['background']
+
+    inline_keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(text="Ritaglia", callback_data="image_resize_mode_crop"),
+        InlineKeyboardButton(text="Ridimensiona", callback_data="image_resize_mode_scale"),
+        InlineKeyboardButton(text="Mi sento 🍀", callback_data="image_resize_mode_random")
+    ]])
+
+    info['bot'].send_message(chat_id=info['chat_id'],
+                             text=text,
+                             reply_markup=inline_keyboard,
+                             parse_mode=ParseMode.MARKDOWN_V2)
+    return STATE['resize_mode']
 
 
 def background_msg(update: Update, context: CallbackContext) -> int:
@@ -150,30 +172,21 @@ def background_msg(update: Update, context: CallbackContext) -> int:
     info = get_message_info(update, context)
     text = read_md("background")
     photo = update.message.photo
-
-    sender_id = info['sender_id']
+    resize_mode = context.user_data['resize_mode']
 
     if photo:  # if an actual photo was sent
         bg_image = info['bot'].getFile(photo[-1].file_id)
-        bg_image.download(build_bg_path(sender_id))
+        bg_image.download(build_bg_path(info['sender_id']))
 
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
-    # Fill default image's tuning settings
-    if config_map['image']['resize_mode'] == "crop":
-        context.user_data['background_offset'] = {
-            'x': 0,
-            'y': 0,
-        }
-
     generate_photo(info, context.user_data)
 
-    if config_map['image']['resize_mode'] == "crop":
-        return STATE['tune']
+    if resize_mode == "crop":
+        return STATE['crop']
+    elif resize_mode == "random":
+        return STATE['random']
     else:
-        if os.path.exists(build_bg_path(sender_id)):
-            os.remove(build_bg_path(sender_id))
-        os.remove(build_photo_path(sender_id))
         return STATE['end']
 
 

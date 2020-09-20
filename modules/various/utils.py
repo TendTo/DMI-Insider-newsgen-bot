@@ -1,6 +1,7 @@
 """Common operation for each command/callback"""
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
+
 
 def get_message_info(update: Update, context: CallbackContext) -> dict:
     """Get the classic info from the update and context parameters
@@ -21,6 +22,7 @@ def get_message_info(update: Update, context: CallbackContext) -> dict:
         'sender_id': update.message.from_user.id
     }
 
+
 def get_callback_info(update: Update, context: CallbackContext) -> dict:
     """Get the classic info from the update and context parameters for callbacks
 
@@ -29,7 +31,7 @@ def get_callback_info(update: Update, context: CallbackContext) -> dict:
         context (CallbackContext): context passed by the handler
 
     Returns:
-        dict: {bot, chat_id, text, message_id, sender_first_name, sender_id}
+        dict: {bot, chat_id, text, message_id, sender_first_name, sender_id, query_data}
     """
     return {
         'bot': context.bot,
@@ -40,3 +42,45 @@ def get_callback_info(update: Update, context: CallbackContext) -> dict:
         'sender_id': update.callback_query.from_user.id,
         'query_data': update.callback_query.data
     }
+
+
+def get_keyboard_crop() -> InlineKeyboardMarkup:
+    """Generates the InlineKeyboardMarkup for the crop callback
+
+    Returns:
+        InlineKeyboardMarkup: reply markup to apply at the message
+    """
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(" -- Posizione sfondo --", callback_data="_")],
+        [
+            InlineKeyboardButton("↖️", callback_data="image_crop_up-left"),
+            InlineKeyboardButton("⬆️", callback_data="image_crop_up"),
+            InlineKeyboardButton("↗️", callback_data="image_crop_up-right")
+        ],
+        [
+            InlineKeyboardButton("️️⬅️", callback_data="image_crop_left"),
+            InlineKeyboardButton("️Reset", callback_data="image_crop_reset"),
+            InlineKeyboardButton("➡️", callback_data="image_crop_right")
+        ],
+        [
+            InlineKeyboardButton("↙️", callback_data="image_crop_down-left"),
+            InlineKeyboardButton("⬇️", callback_data="image_crop_down"),
+            InlineKeyboardButton("↘️", callback_data="image_crop_down-right")
+        ],
+        [InlineKeyboardButton("Genera", callback_data="image_crop_finish")],
+    ])
+
+
+def get_keyboard_random() -> InlineKeyboardMarkup:
+    """Generates the InlineKeyboardMarkup for the random callback
+
+    Returns:
+        InlineKeyboardMarkup: reply markup to apply at the message
+    """
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(" -- Sei stato fortunato? --", callback_data="_")],
+        [
+            InlineKeyboardButton("No, ritenta", callback_data="image_random_again"),
+            InlineKeyboardButton("Si", callback_data="image_random_finish"),
+        ],
+    ])

@@ -1,1 +1,0 @@
-La creazione dell'immagine è stata annullata

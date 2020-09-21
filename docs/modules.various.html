@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Various modules &mdash; DMI-Insider-newsgen-bot  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Debug modules" href="modules.debug.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> DMI-Insider-newsgen-bot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">Main</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">All modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="modules.callbacks.html">Callback modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.commands.html">Commands modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.data.html">Data modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.debug.html">Debug modules</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Various modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-modules.various.photo_utils">photo_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-modules.various.utils">utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DMI-Insider-newsgen-bot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">All modules</a> &raquo;</li>
+        
+      <li>Various modules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/modules.various.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="various-modules">
+<h1>Various modules<a class="headerlink" href="#various-modules" title="Permalink to this headline">¶</a></h1>
+<p><strong>Description</strong></p>
+<span class="target" id="module-modules.various"></span><p>Modules that contains various helper functions</p>
+<div class="section" id="module-modules.various.photo_utils">
+<span id="photo-utils"></span><h2>photo_utils<a class="headerlink" href="#module-modules.various.photo_utils" title="Permalink to this headline">¶</a></h2>
+<p>Generates the image based on the user’s settings</p>
+<dl class="py function">
+<dt id="modules.various.photo_utils.build_bg_path">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">build_bg_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sender_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#modules.various.photo_utils.build_bg_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the path for the background image sent by the user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sender_id</strong> (<em>int</em>) – id of the userd that sent the image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>path where to save/find the image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.build_photo_path">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">build_photo_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sender_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#modules.various.photo_utils.build_photo_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the path for the edited image requested by the user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sender_id</strong> (<em>int</em>) – id of the userd that sent the image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>path where to save/find the image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.create_image">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">create_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">bg_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">photo_path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.various.photo_utils.create_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the image with the data provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – {‘title’: title of the image, ‘caption’: caption of the image, ‘template’: template to be used,
+‘resize_mode’: how to resize the image, ‘background_offset’: offset used to crop the image}</p></li>
+<li><p><strong>bg_path</strong> (<em>str</em>) – path where to find the bg_image, if provided</p></li>
+<li><p><strong>photo_path</strong> (<em>str</em>) – path that will be used to save the image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.draw_text">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">draw_text</code><span class="sig-paren">(</span><em class="sig-param">draw_im: &lt;module 'PIL.ImageDraw' from 'd:\\progetti_programmazione\\visual_code\\dmi-insider-newsgen-bot\\.venv\\lib\\site-packages\\PIL\\ImageDraw.py'&gt;</em>, <em class="sig-param">w: int</em>, <em class="sig-param">text: str</em>, <em class="sig-param">y_text: float</em>, <em class="sig-param">font: any</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#modules.various.photo_utils.draw_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws the text on the image of width w, starting at height y_text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>draw_im</strong> (<em>ImageDraw</em>) – image to draw on</p></li>
+<li><p><strong>w</strong> (<em>int</em>) – with of the image</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – text to write</p></li>
+<li><p><strong>y_text</strong> (<em>int</em>) – height of the text</p></li>
+<li><p><strong>font</strong> (<em>any</em>) – font of the text</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>final height of the text</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.generate_photo">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">generate_photo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">user_data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">delete_message</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.various.photo_utils.generate_photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the image based on the user’s settings, then sends it
+The process can be executed on the main thread or on a separate thread, based on the settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>dict</em>) – {‘bot’: bot used to send the image, ‘chat_id’: id of the chat that will receive the image}</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – {‘title’: title of the image, ‘caption’: caption of the image, ‘template’: template to be used,
+‘resize_mode’: how to resize the image, ‘background_offset’: offset used to crop the image}</p></li>
+<li><p><strong>message_id</strong> (<em>bool</em><em>, </em><em>optional</em>) – whther or not the previous message needs to be deleted. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.resize_image">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">resize_image</code><span class="sig-paren">(</span><em class="sig-param">im: &lt;module 'PIL.Image' from 'd:\\progetti_programmazione\\visual_code\\dmi-insider-newsgen-bot\\.venv\\lib\\site-packages\\PIL\\Image.py'&gt;</em>, <em class="sig-param">fg: &lt;module 'PIL.Image' from 'd:\\progetti_programmazione\\visual_code\\dmi-insider-newsgen-bot\\.venv\\lib\\site-packages\\PIL\\Image.py'&gt;</em>, <em class="sig-param">resize_mode: str</em>, <em class="sig-param">offset: dict</em><span class="sig-paren">)</span> &#x2192; &lt;module ‘PIL.Image’ from ‘d:\progetti_programmazione\visual_code\dmi-insider-newsgen-bot\.venv\lib\site-packages\PIL\Image.py’&gt;<a class="headerlink" href="#modules.various.photo_utils.resize_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes the image with the method specified in resize_mode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>im</strong> (<em>Image</em>) – image to resize</p></li>
+<li><p><strong>fg</strong> (<em>Image</em>) – images wich dimensions will be used to resize the former image</p></li>
+<li><p><strong>resize_mode</strong> (<em>str</em>) – how to resize the image</p></li>
+<li><p><strong>offset</strong> (<em>dict</em>) – offset used to crop the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>newly resized image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.photo_utils.send_image">
+<code class="sig-prename descclassname">modules.various.photo_utils.</code><code class="sig-name descname">send_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">info</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.various.photo_utils.send_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and sends the requested image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>dict</em>) – {‘bot’: bot used to send the image, ‘chat_id’: id of the chat that will receive the image}</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – {‘title’: title of the image, ‘caption’: caption of the image, ‘template’: template to be used,
+‘resize_mode’: how to resize the image, ‘background_offset’: offset used to crop the image}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.various.utils">
+<span id="utils"></span><h2>utils<a class="headerlink" href="#module-modules.various.utils" title="Permalink to this headline">¶</a></h2>
+<p>Common operation for each command/callback</p>
+<dl class="py function">
+<dt id="modules.various.utils.get_callback_info">
+<code class="sig-prename descclassname">modules.various.utils.</code><code class="sig-name descname">get_callback_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#modules.various.utils.get_callback_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the classic info from the update and context parameters for callbacks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<em>Update</em>) – update event</p></li>
+<li><p><strong>context</strong> (<em>CallbackContext</em>) – context passed by the handler</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{bot, chat_id, text, message_id, sender_first_name, sender_id, query_data}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.utils.get_keyboard_crop">
+<code class="sig-prename descclassname">modules.various.utils.</code><code class="sig-name descname">get_keyboard_crop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; telegram.inline.inlinekeyboardmarkup.InlineKeyboardMarkup<a class="headerlink" href="#modules.various.utils.get_keyboard_crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the InlineKeyboardMarkup for the crop callback</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>reply markup to apply at the message</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>InlineKeyboardMarkup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.utils.get_keyboard_random">
+<code class="sig-prename descclassname">modules.various.utils.</code><code class="sig-name descname">get_keyboard_random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; telegram.inline.inlinekeyboardmarkup.InlineKeyboardMarkup<a class="headerlink" href="#modules.various.utils.get_keyboard_random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the InlineKeyboardMarkup for the random callback</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>reply markup to apply at the message</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>InlineKeyboardMarkup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.various.utils.get_message_info">
+<code class="sig-prename descclassname">modules.various.utils.</code><code class="sig-name descname">get_message_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#modules.various.utils.get_message_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the classic info from the update and context parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<em>Update</em>) – update event</p></li>
+<li><p><strong>context</strong> (<em>CallbackContext</em>) – context passed by the handler</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{bot, chat_id, text, message_id, sender_first_name, sender_id}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.debug.html" class="btn btn-neutral float-left" title="Debug modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, UNICT DMI
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

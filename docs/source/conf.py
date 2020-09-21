@@ -61,4 +61,4 @@ def setup(app):
     app.connect('config-inited', mv_settings)
 
 def mv_settings(app,config):
-    os.rename(f'{sys.path[0]}/config/settings.yaml.dist', f'{sys.path[0]}/config/settings.yaml')
+    os.rename(f'{sys.path[0]}/../../config/settings.yaml.dist', f'{sys.path[0]}/../../config/settings.yaml')

@@ -64,4 +64,5 @@ logs/chatid.txt
 module/*.pyc
 .vscode
 test.py
+.sphinx
 

@@ -84,7 +84,7 @@ async def test_templates_conversation(client: TelegramClient):
     """
     conv: Conversation
     async with client.conversation(bot_tag, timeout=TIMEOUT) as conv:
-        for template in ('DMI', 'Informatica', 'Matematica'):
+        for template in ('Vuoto', 'DMI', 'Informatica', 'Matematica'):
             await conv.send_message("/create")  # send a command
             resp: Message = await conv.get_response()
             await resp.click(text=template)  # click inline keyboard

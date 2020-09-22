@@ -73,7 +73,10 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
         text = read_md("create")
         return_state = STATE['template']
         inline_keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton(text="DMI", callback_data="template_DMI"),
+            InlineKeyboardButton(text="Vuoto", callback_data="template_vuoto"),
+            InlineKeyboardButton(text="DMI", callback_data="template_DMI")
+        ],
+        [
             InlineKeyboardButton(text="Informatica", callback_data="template_informatica"),
             InlineKeyboardButton(text="Matematica", callback_data="template_matematica")
         ]])

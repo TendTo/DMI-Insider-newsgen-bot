@@ -6,7 +6,10 @@ This bot is meant to easily generate images with a set template for the DMI-Insi
 ## :red_circle: Try it live
 Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_Bot)
 
-## Image creation flow diagram
+## :books: Documentation
+[Link to the documentation](https://tendto.github.io/DMI-Insider-newsgen-bot/)
+
+## :arrow_upper_right: Image creation flow diagram
 
 	+----V----+     +-------------------+     +-----------+     +-------------+
 	| /create +---->+ template callback +---->+ title msg +---->+ caption msg |

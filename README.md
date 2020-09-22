@@ -55,6 +55,8 @@ Listed in requirements.txt. The main ones are:
 	- **groups:** list of chats or groups allowed to create images. If left [], all chats or groups will be allowed to create images
 	- **image**
 		- **blur:** how much blur you want to apply to the image
+        - **font_size:** font size of the text
+        - **line_width:** how many characters are allowed per line (may not be respected if the words are too long)
 		- **thread:** whether or not the image creation should be handled in a separated thread instead of the main thread
 	- **test:**
 		- **api_hash:** hash of the telegram app used for testing

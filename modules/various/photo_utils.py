@@ -119,7 +119,7 @@ def create_image(data: dict, bg_path: str, photo_path: str):
     im.paste(fg, box=(0, 0), mask=fg)  # apply foreground
 
     draw_im = ImageDraw.Draw(im)
-    font = ImageFont.truetype("data/font/UbuntuCondensed-Regular.ttf", 33)
+    font = ImageFont.truetype("data/font/UbuntuCondensed-Regular.ttf", config_map['image']['font_size'])
     w, h = im.size
 
     y_title = draw_text(draw_im=draw_im, w=w, text=title, y_text=h / 2 - 120, font=font)  # draw the title
@@ -174,7 +174,7 @@ def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -
     return_text = text.split("\n")  # split the title based on the return char \n
     multiline_text = []
     for return_line in return_text:
-        for line in textwrap.wrap(return_line, width=35):  # split the line based on the lenght of the string
+        for line in textwrap.wrap(return_line, config_map['image']['line_width']):  # split the line if the string is too long
             multiline_text.append(line)
     for line in multiline_text:  # write each line of the title
         t_w, t_h = font.getsize(line)

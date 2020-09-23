@@ -1,3 +1,5 @@
+
+
 # DMI-Insider-newsgen-bot
 
 ## Usage
@@ -6,33 +8,13 @@ This bot is meant to easily generate images with a set template for the DMI-Insi
 ## :red_circle: Try it live
 Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_Bot)
 
-## :books: Documentation
-[Link to the documentation](https://tendto.github.io/DMI-Insider-newsgen-bot/)
+## Table of contents
 
-## :arrow_upper_right: Image creation flow diagram
-
-	+----V----+     +-------------------+     +-----------+     +-------------+
-	| /create +---->+ template callback +---->+ title msg +---->+ caption msg |
-	+---------+     +-------------------+     +-----------+     +------+------+
-	                                                                   |
-	                                                                   V
-	                                 +----------------+     +----------------------+
-	                                 | background_msg +<----+ resize mode callback |
-	                                 +-------+--------+     +----------------------+
-	                                         |
-	                       +----------------------------------------+
-	                       |                 |                      |
-	if resize mode =     scale              crop                  random
-	                       |                 |     +----+           |      +----+
-	                       v                 v     v    |           v      v    |
-	                 +-----+-----+   +-------+-----+-+  |  +--------+------+-+  |
-	                 | end photo |   | crop_callback +--+  | random callback +--+
-	                 +-----V-----+   +-------+-------+     +--------+--------+
-	                                         |                      |
-	                                         v                      |
-	                                   +-----+-----+          +-----+-----+
-	                                   | end photo |          | end photo |
-	                                   +-----V-----+          +-----V-----+
+- **[:wrench: Setting up a local istance](#wrench-setting-up-a-local-istance)**
+- **[:whale: Setting up a Docker container](#whale-setting-up-a-docker-container)**
+- **[:bar_chart: _\[Optional\]_ Setting up testing](#bar_chart-optional-setting-up-testing)**
+- **[:books: Documentation](#books-documentation)**
+- **[:arrow_upper_right:  Image creation flow diagram](#arrow_upper_right-image-creation-flow-diagram)**
 
 ## :wrench: Setting up a local istance
 
@@ -41,7 +23,7 @@ Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_
 - python-pip3
 
 #### Install with *pip3*
-Listed in requirements.txt. The main ones are:
+Complete list in requirements.txt. The main ones to install are:
 - python-telegram-bot
 - requests
 - PyYAML
@@ -50,25 +32,32 @@ Listed in requirements.txt. The main ones are:
 ### Steps:
 - Clone this repository
 - Rename "config/settings.yaml.dist" in "config/settings.yaml" and edit the desired parameters:
-	- **debug:**
-		- **db_log:** save each and every message in a log file. Make sure the path "logs/messages.log" is valid before putting it to true
-	- **groups:** list of chats or groups allowed to create images. If left [], all chats or groups will be allowed to create images
-	- **image**
-		- **blur:** how much blur you want to apply to the image
-        - **font_size:** font size of the text
-        - **line_width:** how many characters are allowed per line (may not be respected if the words are too long)
-		- **thread:** whether or not the image creation should be handled in a separated thread instead of the main thread
-	- **test:**
-		- **api_hash:** hash of the telegram app used for testing
-  		- **api_id:** id of the telegram app used for testing
-  		- **groups:**  same of **groups** above. Overrides it during testing
-  		- **session:** session of the telegram app used for testing
-  		- **tag:** tag of the bot used for testing
-  		- **token:** token for the bot used for testing
-	- **token:** the token for your telegram bot
-	- **webhook:**
-		- **enabled:** whether or not the bot should use webhook (false recommended for local)
-		- **url:** the url used by the webhook
+ ```yaml
+debug:
+    db_log: save each and every message in a log file. If true, make sure the path "logs/messages.log" is valid
+    
+ groups: list of chats or groups allowed to create images. If [], all chats or groups will be allowed to create images
+
+image:
+    blur: how much blur you want to apply to the image
+    font_size: font size of the text
+    line_width: how many characters are allowed per line (may not be respected if the words are too long)
+    thread: whether or not the image creation should be handled in a separated thread instead of the main thread
+    
+test:
+    api_hash: hash of the telegram app used for testing
+    api_id: id of the telegram app used for testing
+    groups:  same of groups above. Overrides it during testing
+    session: session of the telegram app used for testing
+    tag: tag of the bot used for testing
+    token: token for the bot used for testing
+
+token: the token for your telegram bot
+
+webhook:
+    enabled: whether or not the bot should use webhook (false recommended for local)
+    url: the url used by the webhook
+```
 - _[Optional]_ Edit the images in "data/img". These images WON'T be blurred by the bot
 - **Run** `python3 main.py`
 
@@ -79,7 +68,7 @@ Listed in requirements.txt. The main ones are:
 
 ### Steps:
 - Clone this repository
-- In "config/settings.yaml.dist", edit the desired values. Be mindful that the one listed below will overwrite the ones in "config/settings.yaml.dist", even if they aren't used in the command line
+- In "config/settings.yaml.dist", edit the desired values. Be mindful that the one listed below will overwrite the ones in "config/settings.yaml.dist", even if they aren't specified in `docker build`
 - _[Optional]_ Edit the images in "data/img". These images WON'T be blurred by the bot
 - **Run** `docker build --tag botimage --build-arg TOKEN=<token_arg> [...] .` 
 
@@ -124,3 +113,31 @@ Listed in requirements.txt. The main ones are:
 #### Steps:
 - Add telethon, pytest and pytest-asyncio to the requirements.txt file
 - Access the container and **Run** `pytest` or edit the Dockerfile to do so
+
+## :books: Documentation
+[Link to the documentation](https://tendto.github.io/DMI-Insider-newsgen-bot/)
+
+## :arrow_upper_right: Image creation flow diagram
+
+	+----V----+     +-------------------+     +-----------+     +-------------+
+	| /create +---->+ template callback +---->+ title msg +---->+ caption msg |
+	+---------+     +-------------------+     +-----------+     +------+------+
+	                                                                   |
+	                                                                   V
+	                                 +----------------+     +----------------------+
+	                                 | background_msg +<----+ resize mode callback |
+	                                 +-------+--------+     +----------------------+
+	                                         |
+	                       +----------------------------------------+
+	                       |                 |                      |
+	if resize mode =     scale              crop                  random
+	                       |                 |     +----+           |      +----+
+	                       v                 v     v    |           v      v    |
+	                 +-----+-----+   +-------+-----+-+  |  +--------+------+-+  |
+	                 | end photo |   | crop_callback +--+  | random callback +--+
+	                 +-----V-----+   +-------+-------+     +--------+--------+
+	                                         |                      |
+	                                         v                      |
+	                                   +-----+-----+          +-----+-----+
+	                                   | end photo |          | end photo |
+	                                   +-----V-----+          +-----V-----+

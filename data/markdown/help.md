@@ -3,6 +3,7 @@
 /create \- avvia il processo di creazione dell'immagine
 /cancel \- annulla il processo di creazione dell'immagine
 /help \- apri questo menù
+/settings \- modifica vari parametri utilizzati nella creazione dell'immagine
 
 *Per creare un'immagine bisogna:* 
 scagliere un template, fra _DMI_, _informatica_ e _matematica_

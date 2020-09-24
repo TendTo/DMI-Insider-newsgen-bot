@@ -11,11 +11,11 @@ from modules.debug.log_manager import log_message
 # data
 from modules.data.data_reader import config_map
 # commands
-from modules.commands.command_handlers import STATE, start_cmd, help_cmd, create_cmd, background_msg, title_msg, caption_msg,\
-    cancel_cmd, fail_msg
+from modules.commands.command_handlers import STATE, start_cmd, help_cmd, settings_cmd,create_cmd, background_msg,\
+    title_msg, caption_msg, cancel_cmd, fail_msg
 # callbacks
 from modules.callbacks.callback_handlers import template_callback, image_resize_mode_callback,\
-    image_crop_callback, image_random_callback
+    image_crop_callback, image_random_callback, settings_callback
 # endregion
 
 
@@ -30,6 +30,8 @@ def add_handlers(dp: Dispatcher):
 
     dp.add_handler(CommandHandler("start", start_cmd))
     dp.add_handler(CommandHandler("help", help_cmd))
+    dp.add_handler(CommandHandler("settings", settings_cmd))
+    dp.add_handler(CallbackQueryHandler(settings_callback, pattern=r"^settings\.*"))
     dp.add_handler(
         ConversationHandler(
             entry_points=[CommandHandler('create', create_cmd)],

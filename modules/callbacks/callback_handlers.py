@@ -2,7 +2,7 @@
 import os
 from telegram import Update, ParseMode
 from telegram.ext import CallbackContext
-from modules.various.utils import get_callback_info
+from modules.various.utils import get_callback_info, get_keyboard_setting
 from modules.various.photo_utils import generate_photo, build_bg_path, build_photo_path
 from modules.data.data_reader import read_md
 from modules.commands.command_handlers import STATE
@@ -41,6 +41,42 @@ OFFSET_VALUES = {
         'y': -50
     },
 }
+
+
+def settings_callback(update: Update, context: CallbackContext):
+    """Handles the template callback
+    Select the desidered template
+
+    Args:
+        update (Update): update event
+        context (CallbackContext): context passed by the handler
+    """
+    info = get_callback_info(update, context)
+    setting = info["query_data"][9:]
+    text = read_md("settings")
+    info['bot'].edit_message_text(chat_id=info['chat_id'],
+                                  message_id=info['message_id'],
+                                  text=text,
+                                  reply_markup=get_keyboard_setting(setting=setting),
+                                  parse_mode=ParseMode.MARKDOWN_V2)
+
+
+def alter_setting_callback(update: Update, context: CallbackContext):
+    """Handles the template callback
+    Select the desidered template
+
+    Args:
+        update (Update): update event
+        context (CallbackContext): context passed by the handler
+    """
+    info = get_callback_info(update, context)
+    setting = info["query_data"][9:]
+    text = read_md("settings")
+    info['bot'].edit_message_text(chat_id=info['chat_id'],
+                                  message_id=info['message_id'],
+                                  text=text,
+                                  reply_markup=get_keyboard_setting(setting=setting),
+                                  parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def template_callback(update: Update, context: CallbackContext) -> int:

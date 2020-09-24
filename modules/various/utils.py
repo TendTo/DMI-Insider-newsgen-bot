@@ -1,6 +1,7 @@
 """Common operation for each command/callback"""
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
+from modules.data.data_reader import config_map
 
 
 def get_message_info(update: Update, context: CallbackContext) -> dict:
@@ -42,6 +43,36 @@ def get_callback_info(update: Update, context: CallbackContext) -> dict:
         'sender_id': update.callback_query.from_user.id,
         'query_data': update.callback_query.data
     }
+
+
+def get_keyboard_setting(setting: str) -> InlineKeyboardMarkup:
+    """Generates the InlineKeyboardMarkup for the settings command
+
+    Returns:
+        InlineKeyboardMarkup: reply markup to apply at the message
+    """
+    if setting == "blur":
+        title = " -- Sfocatura -- "
+        setting_name = "blur"
+    elif setting == "size":
+        title = " -- Dimensione testo -- "
+        setting_name = "font_size"
+    elif setting == "width":
+        title = " -- Caratteri per linea -- "
+        setting_name = "line_width"
+
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(title, callback_data="_")],
+        [
+            InlineKeyboardButton("➖", callback_data=f"alter_setting_{setting}_-"),
+            InlineKeyboardButton(str(config_map['image'][setting_name]), callback_data="_"),
+            InlineKeyboardButton("➕", callback_data=f"alter_setting_{setting}_+"),
+        ],
+        [
+            InlineKeyboardButton("Annulla", callback_data=f"alter_setting_{setting}_cancel"),
+            InlineKeyboardButton("️Salva", callback_data=f"alter_setting_{setting}_save"),
+        ],
+    ])
 
 
 def get_keyboard_crop() -> InlineKeyboardMarkup:

@@ -50,6 +50,32 @@ def help_cmd(update: Update, context: CallbackContext):
     info['bot'].send_message(chat_id=info['chat_id'], text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
+def settings_cmd(update: Update, context: CallbackContext):
+    """Handles the /settings command
+    Let the user set some values used to create the image. Those settings apply to all users
+
+    Args:
+        update (Update): update event
+        context (CallbackContext): context passed by the handler
+    """
+    info = get_message_info(update, context)
+    text = read_md("settings")
+    inline_keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(" -- Impostazioni --", callback_data="_")],
+        [
+            InlineKeyboardButton("Sfocatura", callback_data="settings_blur"),
+        ],
+        [
+            InlineKeyboardButton("️Dimensione testo", callback_data="settings_size"),
+            InlineKeyboardButton("Caratteri per linea", callback_data="settings_width")
+        ],
+    ])
+    info['bot'].send_message(chat_id=info['chat_id'],
+                             text=text,
+                             parse_mode=ParseMode.MARKDOWN_V2,
+                             reply_markup=inline_keyboard)
+
+
 def create_cmd(update: Update, context: CallbackContext) -> int:
     """Handles the /settings command
     Start the process aimed to create the requested image
@@ -76,10 +102,12 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton(text="Vuoto", callback_data="template_vuoto"),
             InlineKeyboardButton(text="DMI", callback_data="template_DMI")
         ],
-        [
-            InlineKeyboardButton(text="Informatica", callback_data="template_informatica"),
-            InlineKeyboardButton(text="Matematica", callback_data="template_matematica")
-        ]])
+                                                [
+                                                    InlineKeyboardButton(text="Informatica",
+                                                                         callback_data="template_informatica"),
+                                                    InlineKeyboardButton(text="Matematica",
+                                                                         callback_data="template_matematica")
+                                                ]])
 
     info['bot'].send_message(chat_id=info['chat_id'],
                              text=text,

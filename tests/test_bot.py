@@ -59,6 +59,42 @@ async def test_help_cmd(client: TelegramClient):
 
 
 @pytest.mark.asyncio
+async def test_settings_cmd(client: TelegramClient):
+    """Tests the settings command
+
+    Args:
+        client (TelegramClient): client used to simulate the user
+    """
+    config_map['image']['blur'] = config_map['image']['font_size'] = config_map['image']['line_width'] = 30
+    conv: Conversation
+    async with client.conversation(bot_tag, timeout=TIMEOUT) as conv:
+        for button_index in (1, 2, 3):
+            await conv.send_message("/settings")  # send a command
+            resp: Message = await conv.get_response()
+
+            assert read_md("settings") == get_telegram_md(resp.text)
+
+            await resp.click(button_index)  # click inline keyboard (Sfocatura, Dimensioni testo, Caratteri per linea)
+            resp: Message = await conv.get_edit()
+
+            assert read_md("settings") == get_telegram_md(resp.text)
+
+            await resp.click(text="➕")  # click inline keyboard (➕)
+            resp: Message = await conv.get_edit()
+
+            assert read_md("settings") == get_telegram_md(resp.text)
+
+            await resp.click(text="➖")  # click inline keyboard (➖)
+            resp: Message = await conv.get_edit()
+
+            assert read_md("settings") == get_telegram_md(resp.text)
+
+            await resp.click(text="Chiudi")  # click inline keyboard (Chiudi)
+            resp: Message = await conv.get_edit()
+
+        assert 30 == config_map['image']['blur'] == config_map['image']['font_size'] == config_map['image']['line_width']
+
+@pytest.mark.asyncio
 async def test_cancel_cmd(client: TelegramClient):
     """Tests the cancel command
 
@@ -87,7 +123,7 @@ async def test_templates_conversation(client: TelegramClient):
         for template in ('Vuoto', 'DMI', 'Informatica', 'Matematica'):
             await conv.send_message("/create")  # send a command
             resp: Message = await conv.get_response()
-            await resp.click(text=template)  # click inline keyboard
+            await resp.click(text=template)  # click inline keyboard (Vuoto, DMI, Informatica, Matematica)
             resp: Message = await conv.get_edit()
 
             assert read_md("template") == get_telegram_md(resp.text)
@@ -227,6 +263,7 @@ async def test_create_crop_conversation(client: TelegramClient):
 
         assert resp.photo is not None
 
+
 @pytest.mark.asyncio
 async def test_create_random_conversation(client: TelegramClient):
     """Tests the whole flow of the create conversation with the user provided image
@@ -328,6 +365,7 @@ async def test_create_scale_thread_conversation(client: TelegramClient):
 
         assert resp.photo is not None
 
+
 @pytest.mark.asyncio
 async def test_create_crop_thread_conversation(client: TelegramClient):
     """Tests the whole flow of the create conversation with the user provided image
@@ -382,6 +420,7 @@ async def test_create_crop_thread_conversation(client: TelegramClient):
         resp: Message = await conv.get_edit()
 
         assert resp.photo is not None
+
 
 @pytest.mark.asyncio
 async def test_create_random_thread_conversation(client: TelegramClient):

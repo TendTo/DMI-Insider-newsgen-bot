@@ -66,8 +66,8 @@ def settings_cmd(update: Update, context: CallbackContext):
             InlineKeyboardButton("Sfocatura", callback_data="settings_blur"),
         ],
         [
-            InlineKeyboardButton("️Dimensione testo", callback_data="settings_size"),
-            InlineKeyboardButton("Caratteri per linea", callback_data="settings_width")
+            InlineKeyboardButton("️Dimensione testo", callback_data="settings_font_size"),
+            InlineKeyboardButton("Caratteri per linea", callback_data="settings_line_width")
         ],
     ])
     info['bot'].send_message(chat_id=info['chat_id'],
@@ -98,16 +98,16 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
     else:
         text = read_md("create")
         return_state = STATE['template']
-        inline_keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton(text="Vuoto", callback_data="template_vuoto"),
-            InlineKeyboardButton(text="DMI", callback_data="template_DMI")
-        ],
-                                                [
-                                                    InlineKeyboardButton(text="Informatica",
-                                                                         callback_data="template_informatica"),
-                                                    InlineKeyboardButton(text="Matematica",
-                                                                         callback_data="template_matematica")
-                                                ]])
+        inline_keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton(text="Vuoto", callback_data="template_vuoto"),
+                InlineKeyboardButton(text="DMI", callback_data="template_DMI")
+            ],
+            [
+                InlineKeyboardButton(text="Informatica", callback_data="template_informatica"),
+                InlineKeyboardButton(text="Matematica", callback_data="template_matematica")
+            ]
+        ])
 
     info['bot'].send_message(chat_id=info['chat_id'],
                              text=text,

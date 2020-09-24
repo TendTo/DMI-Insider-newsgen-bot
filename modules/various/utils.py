@@ -53,24 +53,21 @@ def get_keyboard_setting(setting: str) -> InlineKeyboardMarkup:
     """
     if setting == "blur":
         title = " -- Sfocatura -- "
-        setting_name = "blur"
-    elif setting == "size":
+    elif setting == "font_size":
         title = " -- Dimensione testo -- "
-        setting_name = "font_size"
-    elif setting == "width":
+    elif setting == "line_width":
         title = " -- Caratteri per linea -- "
-        setting_name = "line_width"
 
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(title, callback_data="_")],
         [
-            InlineKeyboardButton("➖", callback_data=f"alter_setting_{setting}_-"),
-            InlineKeyboardButton(str(config_map['image'][setting_name]), callback_data="_"),
-            InlineKeyboardButton("➕", callback_data=f"alter_setting_{setting}_+"),
+            InlineKeyboardButton("➖", callback_data=f"alter_setting_{setting},-"),
+            InlineKeyboardButton(str(config_map['image'][setting]), callback_data="_"),
+            InlineKeyboardButton("➕", callback_data=f"alter_setting_{setting},+"),
         ],
         [
-            InlineKeyboardButton("Annulla", callback_data=f"alter_setting_{setting}_cancel"),
-            InlineKeyboardButton("️Salva", callback_data=f"alter_setting_{setting}_save"),
+            InlineKeyboardButton("Chiudi", callback_data=f"alter_setting_{setting},cancel"),
+            InlineKeyboardButton("️Salva tutto su file", callback_data=f"alter_setting_{setting},save"),
         ],
     ])
 

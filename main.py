@@ -15,7 +15,7 @@ from modules.commands.command_handlers import STATE, start_cmd, help_cmd, settin
     title_msg, caption_msg, cancel_cmd, fail_msg
 # callbacks
 from modules.callbacks.callback_handlers import template_callback, image_resize_mode_callback,\
-    image_crop_callback, image_random_callback, settings_callback
+    image_crop_callback, image_random_callback, settings_callback, alter_setting_callback
 # endregion
 
 
@@ -31,7 +31,10 @@ def add_handlers(dp: Dispatcher):
     dp.add_handler(CommandHandler("start", start_cmd))
     dp.add_handler(CommandHandler("help", help_cmd))
     dp.add_handler(CommandHandler("settings", settings_cmd))
+
     dp.add_handler(CallbackQueryHandler(settings_callback, pattern=r"^settings\.*"))
+    dp.add_handler(CallbackQueryHandler(alter_setting_callback, pattern=r"^alter_setting\.*"))
+
     dp.add_handler(
         ConversationHandler(
             entry_points=[CommandHandler('create', create_cmd)],

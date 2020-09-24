@@ -42,5 +42,12 @@ def read_md(file_name: str) -> str:
     return read_file("data", "markdown", file_name + ".md")
 
 
+def update_settings_file():
+    """Updates the config/settings.yaml file with the config_map values
+    """
+    with open(get_abs_path("config", "settings.yaml"), 'w') as yaml_file:
+        yaml.dump(config_map, yaml_file)
+
+
 with open(get_abs_path("config", "settings.yaml"), 'r') as yaml_config:
-    config_map = yaml.load(yaml_config, Loader=yaml.SafeLoader)
+    config_map: dict = yaml.load(yaml_config, Loader=yaml.SafeLoader)

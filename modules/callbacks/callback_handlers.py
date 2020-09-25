@@ -133,7 +133,7 @@ def image_resize_mode_callback(update: Update, context: CallbackContext) -> int:
     info = get_callback_info(update, context)
     context.user_data['resize_mode'] = info["query_data"][18:]
 
-    if info["query_data"][18:] == "crop":  # set default crop offset
+    if info["query_data"][18:] in ("crop", "scale&crop"):  # set default crop offset
         context.user_data['background_offset'] = {
             'x': 0,
             'y': 0,

@@ -176,11 +176,16 @@ def caption_msg(update: Update, context: CallbackContext) -> int:
     context.user_data['caption'] = info['text']
     text = read_md("caption")
 
-    inline_keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton(text="Ritaglia", callback_data="image_resize_mode_crop"),
-        InlineKeyboardButton(text="Ridimensiona", callback_data="image_resize_mode_scale"),
-        InlineKeyboardButton(text="Mi sento 🍀", callback_data="image_resize_mode_random")
-    ]])
+    inline_keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(text="Ritaglia", callback_data="image_resize_mode_crop"),
+            InlineKeyboardButton(text="Ridimensiona", callback_data="image_resize_mode_scale")
+        ],
+        [
+            InlineKeyboardButton(text="Ridimensiona & Ritaglia", callback_data="image_resize_mode_scale&crop"),
+            InlineKeyboardButton(text="Mi sento 🍀", callback_data="image_resize_mode_random")
+        ]
+    ])
 
     info['bot'].send_message(chat_id=info['chat_id'],
                              text=text,
@@ -213,7 +218,7 @@ def background_msg(update: Update, context: CallbackContext) -> int:
 
     generate_photo(info, context.user_data)
 
-    if resize_mode == "crop":
+    if resize_mode in ("crop", "scale&crop"):
         return STATE['crop']
     elif resize_mode == "random":
         return STATE['random']

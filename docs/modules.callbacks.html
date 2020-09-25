@@ -171,6 +171,21 @@
 <span id="callback-handlers"></span><h2>callback_handlers<a class="headerlink" href="#module-modules.callbacks.callback_handlers" title="Permalink to this headline">¶</a></h2>
 <p>Handles the callbacks</p>
 <dl class="py function">
+<dt id="modules.callbacks.callback_handlers.alter_setting_callback">
+<code class="sig-prename descclassname">modules.callbacks.callback_handlers.</code><code class="sig-name descname">alter_setting_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.callbacks.callback_handlers.alter_setting_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the alter setting callback
+Modify the setting based on the button pressed or finalize it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<em>Update</em>) – update event</p></li>
+<li><p><strong>context</strong> (<em>CallbackContext</em>) – context passed by the handler</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="modules.callbacks.callback_handlers.image_crop_callback">
 <code class="sig-prename descclassname">modules.callbacks.callback_handlers.</code><code class="sig-name descname">image_crop_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#modules.callbacks.callback_handlers.image_crop_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the image crop callback
@@ -232,6 +247,21 @@ Puts the conversation in the “background” state</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="modules.callbacks.callback_handlers.settings_callback">
+<code class="sig-prename descclassname">modules.callbacks.callback_handlers.</code><code class="sig-name descname">settings_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.callbacks.callback_handlers.settings_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the settings callback
+Select which setting the user wants to modify</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<em>Update</em>) – update event</p></li>
+<li><p><strong>context</strong> (<em>CallbackContext</em>) – context passed by the handler</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

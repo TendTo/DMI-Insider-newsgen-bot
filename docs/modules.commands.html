@@ -294,6 +294,21 @@ Sends a short summary of the bot’s commands</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="modules.commands.command_handlers.settings_cmd">
+<code class="sig-prename descclassname">modules.commands.command_handlers.</code><code class="sig-name descname">settings_cmd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.commands.command_handlers.settings_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the /settings command
+Let the user set some values used to create the image. Those settings apply to all users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<em>Update</em>) – update event</p></li>
+<li><p><strong>context</strong> (<em>CallbackContext</em>) – context passed by the handler</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="modules.commands.command_handlers.start_cmd">
 <code class="sig-prename descclassname">modules.commands.command_handlers.</code><code class="sig-name descname">start_cmd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">update</span><span class="p">:</span> <span class="n">telegram.update.Update</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">telegram.ext.callbackcontext.CallbackContext</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.commands.command_handlers.start_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the /start command

@@ -153,7 +153,8 @@ def resize_image(im: Image, fg: Image, resize_mode: str, offset: dict) -> Image:
     elif resize_mode == "scale&crop":
         # Make the image as big as the template proportionally
         for i in range(0, 2):
-            if (ratio := temp_w / im.size[i]) > 1:
+            ratio = temp_w / im.size[i]
+            if ratio > 1:
                 im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
         orig_w, orig_h = im.size  # update the bg image size
         im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2 + offset['y'],

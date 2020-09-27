@@ -6,9 +6,10 @@
 /settings \- modifica vari parametri utilizzati nella creazione dell'immagine
 
 *Per creare un'immagine bisogna:* 
-scagliere un template, fra _DMI_, _informatica_ e _matematica_
+scegliere un template, fra _DMI_, _informatica_ e _matematica_
 fornire un titolo, che sarà in MAIUSCOLO
 fornire una descrizione
+scegliere la modalità di ridimensionamento dell'immagine
 fornire un'immagine di sfondo
 
 *Le modalità di ridimensionamento sono:*

@@ -8,7 +8,7 @@ image:
   thread: false
 test:
   api_hash: ''
-  api_id: ''
+  api_id: -1
   groups: []
   session: ''
   tag: ''

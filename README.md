@@ -19,15 +19,15 @@ Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_
 ## :wrench: Setting up a local istance
 
 #### System requirements
-- Python 3
+- [Python 3](https://www.python.org/downloads/)
 - python-pip3
 
 #### Install with *pip3*
 Complete list in requirements.txt. The main ones to install are:
-- python-telegram-bot
-- requests
-- PyYAML
-- Pillow
+- [python-telegram-bot](https://pypi.org/project/python-telegram-bot/)
+- [requests](https://pypi.org/project/requests/)
+- [PyYAML](https://pypi.org/project/PyYAML/)
+- [Pillow](https://pypi.org/project/Pillow/)
 
 ### Steps:
 - Clone this repository
@@ -64,7 +64,7 @@ webhook:
 ## :whale: Setting up a Docker container
 
 #### System requirements
-- Docker
+- [Docker](https://www.docker.com/get-started)
 
 ### Steps:
 - Clone this repository
@@ -94,16 +94,16 @@ webhook:
 - If it is your first time doing so, it will ask you for an app name and a short name, you can change both of them later if you need to. Submit the form when you have completed it
 - You will then see the **api_id** and **api_hash** for your app. These are unique to your app, and not revocable.
 - Put those values in the "conf/settings.yaml" file for local or in the "conf/settings.yaml.dist" file if you are setting up a docker container
-- **Run** `python3 tests/conftest.py ` follow the procedure and copy the value it provides in the settings file in "testing:session"
+- Copy the file "tests/conftest.py" in the root folder and **Run** `python3 conftest.py `. Follow the procedure and copy the session value it provides in the settings file in "testing:session". You can then delete the copied file present in the root folder, you won't need it again
 - Edit the remaining values in the settings file as you like
 - After this, see the steps below
 
 ### In local:
 
 #### Install with *pip3*
-- telethon
-- pytest
-- pytest-asyncio
+- [telethon](https://pypi.org/project/Telethon/)
+- [pytest](https://pypi.org/project/pytest/)
+- [pytest-asyncio](https://pypi.org/project/pytest-asyncio/)
 
 #### Steps:
 - **Run** `pytest`
@@ -130,7 +130,7 @@ webhook:
 	                                         |
 	                       +----------------------------------------+
 	                       |                 |                      |
-	if resize mode =     scale              crop                  random
+	if resize mode =     scale        crop/scale&crop             random
 	                       |                 |     +----+           |      +----+
 	                       v                 v     v    |           v      v    |
 	                 +-----+-----+   +-------+-----+-+  |  +--------+------+-+  |

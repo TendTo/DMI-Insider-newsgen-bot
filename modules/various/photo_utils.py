@@ -110,7 +110,7 @@ def create_image(data: dict, bg_path: str, photo_path: str):
     if os.path.exists(bg_path):
         im: Image.Image = Image.open(bg_path).filter(ImageFilter.GaussianBlur(config_map['image']['blur']))
     else:
-        im: Image.Image = Image.open(f"data/img/bg_{template}.png")
+        im: Image.Image = Image.open(f"data/img/bg_{template.replace('_vuoto', '')}.png")  # remove "_vuoto" the template path
 
     fg: Image.Image = Image.open(f"data/img/template_{template}.png")
 

@@ -100,12 +100,16 @@ def create_cmd(update: Update, context: CallbackContext) -> int:
         return_state = STATE['template']
         inline_keyboard = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(text="Vuoto", callback_data="template_vuoto"),
-                InlineKeyboardButton(text="DMI", callback_data="template_DMI")
+                InlineKeyboardButton(text="DMI", callback_data="template_DMI"),
+                InlineKeyboardButton(text="DMI vuoto", callback_data="template_DMI_vuoto")
             ],
             [
                 InlineKeyboardButton(text="Informatica", callback_data="template_informatica"),
-                InlineKeyboardButton(text="Matematica", callback_data="template_matematica")
+                InlineKeyboardButton(text="Informatica vuoto", callback_data="template_informatica_vuoto")
+            ],
+            [
+                InlineKeyboardButton(text="Matematica", callback_data="template_matematica"),
+                InlineKeyboardButton(text="Matematica vuoto", callback_data="template_matematica_vuoto")
             ]
         ])
 

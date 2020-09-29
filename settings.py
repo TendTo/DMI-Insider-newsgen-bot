@@ -110,10 +110,12 @@ def main():
             groups = [int(group_id) for group_id in groups]
         except ValueError:
             print("[error] groups must be integers")
+            sys.exit(2)
         try:
             test_api_id = int(test_api_id)
         except ValueError:
             print("[error] test_api_id must be integers")
+            sys.exit(2)
 
     with open(settings_path, 'w') as yaml_file:
         config_map['token'] = new_token

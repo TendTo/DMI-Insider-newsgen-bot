@@ -15,6 +15,7 @@ Live version on telegram [**@DMI_newsgen_Bot**](https://telegram.me/DMI_newsgen_
 - **[:bar_chart: _\[Optional\]_ Setting up testing](#bar_chart-optional-setting-up-testing)**
 - **[:books: Documentation](#books-documentation)**
 - **[:arrow_upper_right:  Image creation flow diagram](#arrow_upper_right-image-creation-flow-diagram)**
+- **[:twisted_rightwards_arrows: About Pull Requests...](#twisted_rightwards_arrows-about-pull-requests...)**
 
 ## :wrench: Setting up a local istance
 
@@ -141,3 +142,17 @@ webhook:
 	                                   +-----+-----+          +-----+-----+
 	                                   | end photo |          | end photo |
 	                                   +-----V-----+          +-----V-----+
+
+## :twisted_rightwards_arrows: About Pull Requests...
+Upon submitting a Pull Request, a github action will be triggered. The workflow will run all the tests to make sure everything still works correctly
+
+The workflow will fail if your repository lacks even one of the following secrets:
+| SECRET | Type | Function |
+| --- | --- | --- |
+| **API_ID** | int | id of the telegram app used for testing |
+| **API_HASH** | string | hash of the telegram app used for testing |
+| **SESSION** | string | session of the telegram app used for testing |
+| **TEST_TAG** | string | tag of the bot used for testing |
+| **TEST_TOKEN** | string | token for the bot used for testing |
+
+**To pass the workflow is not mandatory, but is highly suggested**

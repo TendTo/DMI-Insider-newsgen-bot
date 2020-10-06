@@ -151,6 +151,7 @@ def resize_image(im: Image, fg: Image, resize_mode: str, offset: dict) -> Image:
         ratio = max(temp_w / orig_w, temp_h / orig_h)
         if ratio > 1:
             im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
+        orig_w, orig_h = im.size
         im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2 + offset['y'],
                           (orig_w + temp_w) / 2 + offset['x'], (orig_h + temp_h) / 2 + offset['y']))
     elif resize_mode == "scale":  # scales the image so that it fits (ignores proportions)
@@ -159,6 +160,7 @@ def resize_image(im: Image, fg: Image, resize_mode: str, offset: dict) -> Image:
         ratio = max(temp_w / orig_w, temp_h / orig_h)
         if ratio > 1:
             im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
+        orig_w, orig_h = im.size
         x_offset = random.randint(-abs(orig_w - temp_w) // 2, abs(orig_w - temp_w) // 2)
         y_offset = random.randint(-abs(orig_h - temp_h) // 2, abs(orig_h - temp_h) // 2)
         im = im.crop(box=((orig_w - temp_w) / 2 + x_offset, (orig_h - temp_h) / 2 + y_offset, (orig_w + temp_w) / 2 + x_offset,

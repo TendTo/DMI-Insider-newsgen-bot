@@ -182,7 +182,7 @@ def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font_size: i
         int: final height of the text
     """
     font = ImageFont.truetype(font="data/font/UbuntuCondensed-Regular.ttf", size=font_size)
-    for line in wrap_text(text=text, max_w=w / 2, font=font):  # write each line of the text
+    for line in wrap_text(text=text, max_w=w / 3 * 2, font=font):  # write each line of the text
         t_w, t_h = font.getsize(line)
         draw_im.multiline_text(xy=((w - t_w) / 2, y_text), text=line, fill="white", font=font)
         y_text += t_h + 5

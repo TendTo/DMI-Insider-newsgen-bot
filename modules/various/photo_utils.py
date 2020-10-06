@@ -119,11 +119,13 @@ def create_image(data: dict, bg_path: str, photo_path: str):
     im.paste(fg, box=(0, 0), mask=fg)  # apply foreground
 
     draw_im = ImageDraw.Draw(im)
-    font = ImageFont.truetype("data/font/UbuntuCondensed-Regular.ttf", config_map['image']['font_size'])
     w, h = im.size
 
-    y_title = draw_text(draw_im=draw_im, w=w, text=title, y_text=h / 2 - 120, font=font)  # draw the title
-    draw_text(draw_im=draw_im, w=w, text=caption, y_text=max(y_title + 30, h / 2 - 20), font=font)  # draw the caption
+    y_title = draw_text(draw_im=draw_im, w=w, text=title, y_text=h / 2 - 120,
+                        font_size=config_map['image']['font_size_title'])  # draw the title
+
+    draw_text(draw_im=draw_im, w=w, text=caption, y_text=y_title + 30,
+              font_size=config_map['image']['font_size_caption'])  # draw the caption
 
     im.save(photo_path)
     im.close()
@@ -167,7 +169,7 @@ def resize_image(im: Image, fg: Image, resize_mode: str, offset: dict) -> Image:
     return im
 
 
-def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -> int:
+def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font_size: int) -> int:
     """Draws the text on the image of width w, starting at height y_text
 
     Args:
@@ -180,13 +182,41 @@ def draw_text(draw_im: ImageDraw, w: int, text: str, y_text: float, font: any) -
     Returns:
         int: final height of the text
     """
-    return_text = text.split("\n")  # split the title based on the return char \n
-    multiline_text = []
-    for return_line in return_text:
-        for line in textwrap.wrap(return_line, config_map['image']['line_width']):  # split the line if the string is too long
-            multiline_text.append(line)
-    for line in multiline_text:  # write each line of the title
+    font = ImageFont.truetype(font="data/font/UbuntuCondensed-Regular.ttf", size=font_size)
+    for line in wrap_text(text=text, max_w=w / 2, font=font):  # write each line of the text
         t_w, t_h = font.getsize(line)
         draw_im.multiline_text(xy=((w - t_w) / 2, y_text), text=line, fill="white", font=font)
-        y_text += t_h
+        y_text += t_h + 5
     return y_text
+
+
+def wrap_text(text: str, max_w: int, font: any) -> list:
+    """Wraps the text so that no line is longer than the max width allowed
+
+    Args:
+        text (str): text to wrap
+        max_w (int): max width the text is allowed to be
+        font (any): font the text will use
+
+    Returns:
+        list: list of lines (str)
+    """
+    lines = []
+
+    if font.getsize(text)[0] < max_w:
+        lines.append(text)
+        return lines
+
+    for row in text.split("\n"):
+        line = None
+        for word in row.split():
+            if not line:
+                line = word
+            elif font.getsize(line + word)[0] < max_w:
+                line += " " + word
+            else:
+                lines.append(line)
+                line = word
+        if line:
+            lines.append(line)
+    return lines

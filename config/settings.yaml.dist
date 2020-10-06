@@ -3,7 +3,8 @@ debug:
 groups: []
 image:
   blur: 10
-  font_size: 33
+  font_size_caption: 33
+  font_size_title: 36
   line_width: 35
   thread: false
 test:

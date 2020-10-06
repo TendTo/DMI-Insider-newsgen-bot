@@ -69,7 +69,7 @@ def send_image(info: dict, data: dict):
     create_image(data=data, bg_path=bg_path, photo_path=photo_path)  # create the image to send
 
     # Set the inline keyboard and whether the images should be deleted from the disk immediatly, based on the resize_mode
-    if resize_mode in ("crop", "scale&crop"):
+    if resize_mode in "crop":
         clear = False
         reply_markup = get_keyboard_crop()
     elif resize_mode == "scale":
@@ -104,7 +104,7 @@ def create_image(data: dict, bg_path: str, photo_path: str):
     caption = data['caption']
     template = data['template']
     resize_mode = data['resize_mode']
-    background_offset = data['background_offset'] if resize_mode in ("crop", "scale&crop") else None
+    background_offset = data['background_offset'] if resize_mode == "crop" else None
 
     # Load background
     if os.path.exists(bg_path):
@@ -148,20 +148,17 @@ def resize_image(im: Image, fg: Image, resize_mode: str, offset: dict) -> Image:
     temp_w, temp_h = fg.size  # size of the template image
 
     if resize_mode == "crop":  # crops the image from the center + the offset
+        ratio = max(temp_w / orig_w, temp_h / orig_h)
+        if ratio > 1:
+            im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
         im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2 + offset['y'],
                           (orig_w + temp_w) / 2 + offset['x'], (orig_h + temp_h) / 2 + offset['y']))
     elif resize_mode == "scale":  # scales the image so that it fits (ignores proportions)
         im = im.resize(fg.size)
-    elif resize_mode == "scale&crop":
-        # Make the image as big as the template proportionally
-        for i in range(0, 2):
-            ratio = temp_w / im.size[i]
-            if ratio > 1:
-                im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
-        orig_w, orig_h = im.size  # update the bg image size
-        im = im.crop(box=((orig_w - temp_w) / 2 + offset['x'], (orig_h - temp_h) / 2 + offset['y'],
-                          (orig_w + temp_w) / 2 + offset['x'], (orig_h + temp_h) / 2 + offset['y']))
     elif resize_mode == "random":  # crops the image from the center + the random offset
+        ratio = max(temp_w / orig_w, temp_h / orig_h)
+        if ratio > 1:
+            im = im.resize((int(orig_w * ratio), int(orig_h * ratio)))
         x_offset = random.randint(-abs(orig_w - temp_w) // 2, abs(orig_w - temp_w) // 2)
         y_offset = random.randint(-abs(orig_h - temp_h) // 2, abs(orig_h - temp_h) // 2)
         im = im.crop(box=((orig_w - temp_w) / 2 + x_offset, (orig_h - temp_h) / 2 + y_offset, (orig_w + temp_w) / 2 + x_offset,

@@ -66,8 +66,8 @@ def settings_cmd(update: Update, context: CallbackContext):
             InlineKeyboardButton("Sfocatura", callback_data="settings_blur"),
         ],
         [
-            InlineKeyboardButton("️Dimensione testo", callback_data="settings_font_size"),
-            InlineKeyboardButton("Caratteri per linea", callback_data="settings_line_width")
+            InlineKeyboardButton("️Dimensione titolo", callback_data="settings_font_size_title"),
+            InlineKeyboardButton("Dimensione descrizione", callback_data="settings_font_size_caption")
         ],
     ])
     info['bot'].send_message(chat_id=info['chat_id'],
@@ -186,7 +186,6 @@ def caption_msg(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton(text="Ridimensiona", callback_data="image_resize_mode_scale")
         ],
         [
-            InlineKeyboardButton(text="Ridimensiona & Ritaglia", callback_data="image_resize_mode_scale&crop"),
             InlineKeyboardButton(text="Mi sento 🍀", callback_data="image_resize_mode_random")
         ]
     ])
@@ -222,7 +221,7 @@ def background_msg(update: Update, context: CallbackContext) -> int:
 
     generate_photo(info, context.user_data)
 
-    if resize_mode in ("crop", "scale&crop"):
+    if resize_mode == "crop":
         return STATE['crop']
     elif resize_mode == "random":
         return STATE['random']

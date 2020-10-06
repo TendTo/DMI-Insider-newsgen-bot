@@ -41,8 +41,8 @@ debug:
 
 image:
     blur: how much blur you want to apply to the image
-    font_size: font size of the text
-    line_width: how many characters are allowed per line (may not be respected if the words are too long)
+    font_size_title: font size of the title
+    font_size_caption: font size of the caption
     thread: whether or not the image creation should be handled in a separated thread instead of the main thread
     
 test:
@@ -131,7 +131,7 @@ webhook:
 	                                         |
 	                       +----------------------------------------+
 	                       |                 |                      |
-	if resize mode =     scale        crop/scale&crop             random
+	if resize mode =     scale             crop                  random
 	                       |                 |     +----+           |      +----+
 	                       v                 v     v    |           v      v    |
 	                 +-----+-----+   +-------+-----+-+  |  +--------+------+-+  |

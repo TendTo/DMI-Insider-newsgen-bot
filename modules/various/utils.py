@@ -53,10 +53,10 @@ def get_keyboard_setting(setting: str) -> InlineKeyboardMarkup:
     """
     if setting == "blur":
         title = " -- Sfocatura -- "
-    elif setting == "font_size":
-        title = " -- Dimensione testo -- "
-    elif setting == "line_width":
-        title = " -- Caratteri per linea -- "
+    elif setting == "font_size_title":
+        title = " -- Dimensione titolo -- "
+    elif setting == "font_size_caption":
+        title = " -- Dimensione descrizione -- "
 
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(title, callback_data="_")],

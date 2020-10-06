@@ -5,7 +5,6 @@ image:
   blur: 10
   font_size_caption: 33
   font_size_title: 36
-  line_width: 35
   thread: false
 test:
   api_hash: ''
@@ -21,21 +20,21 @@ webhook:
 
 
 # debug:
-#	   db_log: save each and every message in a log file. Make sure the path "logs/messages.log" is valid before putting it to true
+#	  db_log: save each and every message in a log file. Make sure the path "logs/messages.log" is valid before putting it to true
 # groups: list of chats or groups allowed to create images. If left [], all chats or groups will be allowed to create images
 # image
-#    blur: how much blur you want to apply to the image
-#    font_size: font size of the text
-#    line_width: how many characters are allowed per line (may not be respected if the words are too long)
-# 	 thread: whether or not the image creation should be handled in a separated thread instead of the main thread
+#   blur: how much blur you want to apply to the image
+#   font_size_title: font size of the title
+#   font_size_caption: font size of the caption
+#   thread: whether or not the image creation should be handled in a separated thread instead of the main thread
 # test:
-#	   api_hash: hash of the telegram app used for testing
-#		 api_id: id of the telegram app used for testing
-#		 groups:  same of groups above. Overrides it during testing
-#		 session: session of the telegram app used for testing
-#		 tag: tag of the bot used for testing
-#		 token: token for the bot used for testing
+#	  api_hash: hash of the telegram app used for testing
+#   api_id: id of the telegram app used for testing
+#   groups:  same of groups above. Overrides it during testing
+#   session: session of the telegram app used for testing
+#   tag: tag of the bot used for testing
+#   token: token for the bot used for testing
 # token: the token for your telegram bot
 # webhook:
-#	   enabled: whether or not the bot should use webhook (false recommended for local)
-#	   url: the url used by the webhook
+#	  enabled: whether or not the bot should use webhook (false recommended for local)
+#	  url: the url used by the webhook

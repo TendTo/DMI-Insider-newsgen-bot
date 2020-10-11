@@ -13,10 +13,9 @@ scegliere la modalità di ridimensionamento dell'immagine
 fornire un'immagine di sfondo
 
 *Le modalità di ridimensionamento sono:*
-\-*Ritaglia* \- le dimensioni non verranno alterate, ma si potrà decidere come ritagliare l'immagine
-\-*Ridimensiona* \- l'immagine sarà ridimensionata fino ad essere 750x750 ignorando le proporzioni
-\-*Ridimensiona & Ritaglia* \- l'immagine sarà ingrandita mantenendo le proporzioni in modo che ogni sua dimensione sia almeno 750\. Si potrà decidere come ritagliare l'immagine
-\-*Mi sento 🍀* \- le dimensioni non verranno alterate, ma si potrà giocare alla lotteria per ritagliare l'immagine
+\-*Ritaglia* \-  decidi come ritagliare l'immagine
+\-*Ridimensiona* \- fai si che l'immagine abbia dimensioni 750x750 (ignora le proporzioni)
+\-*Mi sento 🍀* \- gioca alla lotteria per ritagliare l'immagine
 
-L'immagine fornita verrà sfocata e ridimensionata fino ad essere 750 x 750\.
+L'immagine fornita verrà sfocata e ingrandita, se necessario, in modo che ogni sua dimensione sia maggiore o uguale a 750, mantenendo le proporzioni originali\.
 In alternativa si può usare lo sfondo di default del template scelto mandando un messaggio con _none_ al posto di un'immagine

@@ -32,7 +32,7 @@ Complete list in requirements.txt. The main ones to install are:
 
 ### Steps:
 - Clone this repository
-- Rename "config/settings.yaml.dist" in "config/settings.yaml" and edit the desired parameters:
+- Rename _config/settings.yaml.dist_ in _config/settings.yaml_ and edit the desired parameters:
  ```yaml
 debug:
     db_log: save each and every message in a log file. If true, make sure the path "logs/messages.log" is valid
@@ -50,8 +50,8 @@ test:
     api_id: id of the telegram app used for testing
     groups:  same of groups above. Overrides it during testing
     session: session of the telegram app used for testing
-    tag: tag of the bot used for testing
-    token: token for the bot used for testing
+    tag: tag of the telegram bot used for testing. Include the '@' character
+    token: token for the telegram bot used for testing
 
 token: the token for your telegram bot
 
@@ -59,7 +59,7 @@ webhook:
     enabled: whether or not the bot should use webhook (false recommended for local)
     url: the url used by the webhook
 ```
-- _[Optional]_ Edit the images in "data/img". These images WON'T be blurred by the bot
+- _[Optional]_ Edit the images in _data/img_. These images WON'T be blurred by the bot
 - **Run** `python3 main.py`
 
 ## :whale: Setting up a Docker container
@@ -69,8 +69,8 @@ webhook:
 
 ### Steps:
 - Clone this repository
-- In "config/settings.yaml.dist", edit the desired values. Be mindful that the one listed below will overwrite the ones in "config/settings.yaml.dist", even if they aren't specified in `docker build`
-- _[Optional]_ Edit the images in "data/img". These images WON'T be blurred by the bot
+- In _config/settings.yaml.dist_, edit the desired values. Be mindful that the one listed below will overwrite the ones in _config/settings.yaml.dist_, even if they aren't specified in `docker build`
+- _[Optional]_ Edit the images in _data/img_. These images WON'T be blurred by the bot
 - **Run** `docker build --tag botimage --build-arg TOKEN=<token_arg> [...] .` 
 
 | In the command line <br>(after each --build-arg) | Type | Function | Optional |
@@ -90,14 +90,28 @@ webhook:
 
 ### Create a Telegram app:
 
-#### Steps [(source)](https://dev.to/blueset/how-to-write-integration-tests-for-a-telegram-bot-4c0e):
-- Sign in your Telegram account with your phone number here. Then choose “API development tools”
+#### Steps:
+- Sign in your Telegram account with your phone number **[here](https://my.telegram.org/auth)**. Then choose “API development tools”
 - If it is your first time doing so, it will ask you for an app name and a short name, you can change both of them later if you need to. Submit the form when you have completed it
 - You will then see the **api_id** and **api_hash** for your app. These are unique to your app, and not revocable.
-- Put those values in the "conf/settings.yaml" file for local or in the "conf/settings.yaml.dist" file if you are setting up a docker container
-- Copy the file "tests/conftest.py" in the root folder and **Run** `python3 conftest.py `. Follow the procedure and copy the session value it provides in the settings file in "testing:session". You can then delete the copied file present in the root folder, you won't need it again
-- Edit the remaining values in the settings file as you like
-- After this, see the steps below
+- Put those values in the _conf/settings.yaml_ file for local or in the _conf/settings.yaml.dist_ file if you are setting up a docker container
+```yaml
+test:
+    api_hash: HERE
+    api_id: HERE
+	...
+```
+- Copy the file _tests/conftest.py_ in the root folder and **Run** `python3 conftest.py `. Follow the procedure and copy the session string it provides in the settings file:
+```yaml
+test:
+	...
+    session: HERE
+	...
+```
+- You can then delete the _conftest.py_ file present in the root folder, you won't need it again
+- Edit the remaining values in the file as you see fit
+
+**Check [here](https://dev.to/blueset/how-to-write-integration-tests-for-a-telegram-bot-4c0e) you you want to have more information on the steps above**
 
 ### In local:
 

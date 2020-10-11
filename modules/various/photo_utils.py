@@ -2,7 +2,6 @@
 import os
 import random
 from threading import Thread
-import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from modules.data.data_reader import config_map
 from modules.various.utils import get_keyboard_crop, get_keyboard_random

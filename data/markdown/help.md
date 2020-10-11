@@ -14,7 +14,7 @@ fornire un'immagine di sfondo
 
 *Le modalità di ridimensionamento sono:*
 \-*Ritaglia* \-  decidi come ritagliare l'immagine
-\-*Ridimensiona* \- fai si che l'immagine abbia dimensioni 750x750 (ignora le proporzioni)
+\-*Ridimensiona* \- fai si che l'immagine abbia dimensioni 750x750, ignorando le proporzioni
 \-*Mi sento 🍀* \- gioca alla lotteria per ritagliare l'immagine
 
 L'immagine fornita verrà sfocata e ingrandita, se necessario, in modo che ogni sua dimensione sia maggiore o uguale a 750, mantenendo le proporzioni originali\.

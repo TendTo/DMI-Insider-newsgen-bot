@@ -178,10 +178,8 @@ def image_crop_callback(update: Update, context: CallbackContext) -> int:
     else:
         offset_value = OFFSET_VALUES[operation]
 
-        context.user_data['background_offset'] = {
-            'x': context.user_data['background_offset']['x'] + offset_value['x'],
-            'y': context.user_data['background_offset']['y'] + offset_value['y']
-        }
+        context.user_data['background_offset']['x'] += offset_value['x']
+        context.user_data['background_offset']['y'] += offset_value['y']
 
     generate_photo(info=info, user_data=context.user_data, delete_message=True)
 

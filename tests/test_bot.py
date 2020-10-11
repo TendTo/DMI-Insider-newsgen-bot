@@ -92,7 +92,9 @@ async def test_settings_cmd(client: TelegramClient):
             await resp.click(text="Chiudi")  # click inline keyboard (Chiudi)
             resp: Message = await conv.get_edit()
 
-        assert 30 == config_map['image']['blur'] == config_map['image']['font_size_title'] == config_map['image']['font_size_caption']
+        assert 30 == config_map['image']['blur'] == \
+                    config_map['image']['font_size_title'] == \
+                    config_map['image']['font_size_caption']
 
 
 @pytest.mark.asyncio

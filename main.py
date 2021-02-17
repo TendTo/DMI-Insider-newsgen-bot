@@ -4,19 +4,36 @@
 import os
 import warnings
 # telegram
+from telegram import BotCommand
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler,\
-     Filters, Dispatcher
+    Filters, Dispatcher
 # debug
 from modules.debug.log_manager import log_message
 # data
 from modules.data.data_reader import config_map
 # commands
-from modules.commands.command_handlers import STATE, start_cmd, help_cmd, settings_cmd,create_cmd, background_msg,\
+from modules.commands.command_handlers import STATE, start_cmd, help_cmd, settings_cmd, create_cmd, background_msg,\
     title_msg, caption_msg, cancel_cmd, fail_msg
 # callbacks
 from modules.callbacks.callback_handlers import template_callback, image_resize_mode_callback,\
     image_crop_callback, image_random_callback, settings_callback, alter_setting_callback
 # endregion
+
+
+def add_commands(up: Updater):
+    """Adds the list of commands with their description to the bot
+
+    Args:
+        up (Updater): supplyed Updater
+    """
+    commands = [
+        BotCommand("start", "presentazione iniziale del bot"),
+        BotCommand("create", "avvia il processo di creazione dell'immagine"),
+        BotCommand("cancel ", "annulla la procedura in corso e resetta il bot"),
+        BotCommand("help ", "funzionamento e scopo del bot"),
+        BotCommand("settings", "modifica vari parametri utilizzati nella creazione dell'immagine")
+    ]
+    up.bot.set_my_commands(commands=commands)
 
 
 def add_handlers(dp: Dispatcher):
@@ -57,6 +74,7 @@ def main():
     """Main function
     """
     updater = Updater(config_map['token'], request_kwargs={'read_timeout': 20, 'connect_timeout': 20}, use_context=True)
+    add_commands(updater)
     add_handlers(updater.dispatcher)
 
     if config_map['webhook']['enabled']:  # if the webhook is enabled, start the webhook...
